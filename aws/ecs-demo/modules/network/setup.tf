@@ -4,6 +4,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    key = "network.tfstate"
+    key     = "network.tfstate"
+    encrypt = true
   }
 }
