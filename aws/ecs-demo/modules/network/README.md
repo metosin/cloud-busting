@@ -7,7 +7,7 @@ router tables that route traffic to internet gateway from the public subnet and 
 
 First, initialize the backend with:
 
-    $ ../../../tools/terraform-init
+    $ source ../../../tools/terraform-init
 
     Initializing the backend...
 

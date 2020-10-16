@@ -8,6 +8,8 @@ DYNAMODB_TABLE=$(terraform output dynamodb_table)
 KMS_KEY_ID=$(terraform output kms_key_id)
 popd > /dev/null
 
+export TF_VAR_state_bucket=$STATE_BUCKET
+
 terraform init \
           -backend-config="bucket=$STATE_BUCKET" \
           -backend-config="dynamodb_table=$DYNAMODB_TABLE" \
