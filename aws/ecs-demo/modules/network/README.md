@@ -36,3 +36,30 @@ After backend initialization, other Terraform commands can be run, for example, 
 And apply changes via
 
     $ terraform apply
+
+### Usage with workspaces
+
+To create a new network, for example for feature branches, first create a new workspace
+
+
+    $ terraform workspace new experiment
+    Created and switched to workspace "experiment"!
+
+    You're now on a new, empty workspace. Workspaces isolate their state,
+    so if you run "terraform plan" Terraform will not see any existing state
+    for this configuration.
+
+Then run other Terraform commands normally. To see a list of workspaces, run:
+
+    $ terraform workspace list
+    default
+    * experiment
+
+After the experiment is done, destroy infrastructure with `destroy` command.
+
+    $ terraform destroy
+
+To return to default workspace, run:
+
+    $ terraform workspace select default
+    Switched to workspace "default".
