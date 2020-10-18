@@ -28,7 +28,7 @@ Then issuing
 Provides a menu to select Terraform version.
 
 Tfswitch has the advantage of being able to [specify the required Terraform
-version](https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version) in a [configurafion](https://tfswitch.warrensbox.com/Quick-Start/#use-versiontf-file) file:
+version](https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version) in a [configurafion](https://tfswitch.warrensbox.com/Quick-Start/#use-versiontf-file) file, which helps to make sure everyone in your team is using the same version of Terraform:
 
     $ cat version.tf
     terraform {
