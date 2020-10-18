@@ -1,4 +1,6 @@
-# base-infra
+# cloud-busting
+
+Learn to manage infrastructure with Terraform.
 
 ## Installing Terraform
 
