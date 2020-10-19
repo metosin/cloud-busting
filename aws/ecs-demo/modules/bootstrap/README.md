@@ -4,12 +4,6 @@ Module for creating resources for [Terraform backend state](https://www.terrafor
 
 ## Usage
 
-    # Set region to eu-west-1
-    $ export AWS_DEFAULT_REGION=eu-west-1
-
-    # Set a prefix to separate resources from other projects/users
-    $ export TF_VAR_prefix=cb-kimmo
-
     # First, initialize the local backend
     $ terraform init
     Initializing the backend...

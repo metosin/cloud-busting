@@ -8,9 +8,24 @@ This example consists of the following modules:
 
 ## General Usage
 
-The following commands can be within the modules directory
+Before running Terraform in a shell, set a unique prefix to separate resources from each other when using a shared AWS
+account, for example:
 
-First, initialize the Terraform backend with:
+    $ export TF_VAR_prefix=cb-kimmo
+
+, where
+
+* `export TF_VAR_prefix`
+  * Will assing a value to the `prefix` Terraform variable, defined in the Terrafom configuration
+* `cb-kimmo`
+  * Is the prefix to apply to resource names, using convention: `<project>`-`<instance>`
+
+Also specify the AWS region to use:
+
+    # Set region to Ireland
+    $ export AWS_DEFAULT_REGION=eu-west-1
+
+First, initialize the Terraform backend of a module with:
 
     $ source ../../../tools/terraform-init
 
