@@ -19,6 +19,7 @@ resource "aws_kms_key" "terraform" {
   description = "Key for encrypting Terraform state files"
 }
 
+# Alias for the key makes it easier to find the key by name
 resource "aws_kms_alias" "terraform" {
   name          = "alias/${var.prefix}-terraform"
   target_key_id = aws_kms_key.terraform.key_id
