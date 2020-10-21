@@ -1,12 +1,13 @@
 locals {
-  suffix = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
+  workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
+  prefix_name = "${var.prefix}${local.workspace_name}"
 }
 
 resource "aws_ecs_cluster" "main" {
-  name = "${var.prefix}-main${local.suffix}"
+  name = "${local.prefix_name}-main"
 
   tags = {
-    Name      = "${var.prefix}-vpc${local.suffix}"
+    Name      = "${local.prefix_name}-main"
     Prefix    = var.prefix
     Workspace = terraform.workspace
   }
