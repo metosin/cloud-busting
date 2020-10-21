@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-BOOTSTRAP_DIR=$(pwd)/../bootstrap
+TERRAFORM_BACKEND_DIR=$(pwd)/../../../terraform-backend
 
-pushd $BOOTSTRAP_DIR > /dev/null
+pushd $TERRAFORM_BACKEND_DIR > /dev/null
 STATE_BUCKET=$(terraform output state_bucket)
 DYNAMODB_TABLE=$(terraform output dynamodb_table)
 KMS_KEY_ID=$(terraform output kms_key_id)
