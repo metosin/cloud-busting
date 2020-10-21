@@ -8,17 +8,19 @@ This example consists of the following modules:
 
 ## General Usage
 
-Before running Terraform in a shell, set a unique prefix to separate resources from each other when using a shared AWS
-account, for example:
+The example(s) use a common way of running Terraform, described in the following sections.
 
-    $ export TF_VAR_prefix=cb-kimmo
+### Resource naming
 
-, where
+Resources are named in a named in a way that allows multiple instances to co-exist in the same AWS account. A Terraform variable `prefix` is used to store a prefix for the resource name. Workspaces are also used for naming, but this is elaborated a bit later in the workspaces section.
 
-* `export TF_VAR_prefix`
-  * Will assing a value to the `prefix` Terraform variable, defined in the Terrafom configuration
-* `cb-kimmo`
-  * Is the prefix to apply to resource names, using convention: `<project>`-`<instance>`
+Before running Terraform in a shell, use assing a value to the `prefix` variable via [TF_VAR_name](https://www.terraform.io/docs/commands/environment-variables.html#tf_var_name) convention:
+
+    $ export TF_VAR_prefix=cbkimmo
+
+This will make the value visible to all modules that have `prefix` variable definition.
+
+### Running commands
 
 Also specify the AWS region to use:
 
