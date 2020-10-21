@@ -46,6 +46,10 @@ This will make the value visible to all modules that have `prefix` variable defi
 
 Before creating resources, a store for the [Terraform state](https://www.terraform.io/docs/backends/index.html) needs to be created.
 
+```bash
+cd terraform-backend
+```
+
 See instructions in [terraform-backend](./terraform-backend/README.md).
 
 ### Running Commands in Modules
