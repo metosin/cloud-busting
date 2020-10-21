@@ -4,28 +4,30 @@ Module for creating resources for [Terraform backend state](https://www.terrafor
 
 ## Usage
 
-    # First, initialize the local backend
-    $ terraform init
-    Initializing the backend...
+```bash
+# First, initialize the local backend
+$ terraform init
+Initializing the backend...
 
-    Initializing provider plugins...
-    - Using previously-installed hashicorp/aws v3.11.0
+Initializing provider plugins...
+- Using previously-installed hashicorp/aws v3.11.0
 
-    Terraform has been successfully initialized!
+Terraform has been successfully initialized!
 
-    You may now begin working with Terraform. Try running "terraform plan" to see
-    any changes that are required for your infrastructure. All Terraform commands
-    should now work.
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
 
-    If you ever set or change modules or backend configuration for Terraform,
-    rerun this command to reinitialize your working directory. If you forget, other
-    commands will detect it and remind you to do so if necessary.
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
 
-    # Check plan with:
-    $ terraform plan
-    ...
+# Check plan with:
+$ terraform plan
+...
 
-    # Apply plan with
-    $ terraform apply
+# Apply plan with
+$ terraform apply
+```
 
 As last, commit `terraform.tfstate` file, which is is local backend state file, into version control, so that the bootstrap state is persisted off your computer.
