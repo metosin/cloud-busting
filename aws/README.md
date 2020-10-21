@@ -24,3 +24,8 @@ AWS_PROFILE=your-profile terraform apply
 
 Where `your-profile` is your aws profile in your `~/.aws/credentials` file as described in the previous documentation.
  
+Or you can export the profile so that you don't have to provide it in every terraform and aws cli command:
+
+```bash
+export AWS_PROFILE=your-profile
+```
