@@ -104,6 +104,18 @@ terraform apply
 of the resources defined in the modules. This is useful for example for demoing feature branches in such a way that they
 do not collide with existing environment.
 
+The example(s) use resource naming convention, where workspace name is added after the prefix, but before resource name, e.g.:
+
+```
+<prefix>-<workspace-name>-<resource-name>
+```
+
+If the `default` workspace is used, then the middle part is left out of resource name:
+
+```
+<prefix>-<resource-name>
+```
+
 To create a new workspace in a module, run
 
 ```bash
