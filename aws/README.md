@@ -38,7 +38,7 @@ export AWS_PROFILE=your-profile
 
 Resources are named in a named in a way that allows multiple instances to co-exist in the same AWS account. A Terraform variable `prefix` is used to store a prefix for the resource name. Workspaces are also used for naming, but this is elaborated a bit later in the workspaces section.
 
-Before running Terraform in a shell, use assing a value to the `prefix` variable via [TF_VAR_name](https://www.terraform.io/docs/commands/environment-variables.html#tf_var_name) convention:
+Before running Terraform in a shell, assign a value to the `prefix` variable via [TF_VAR_name](https://www.terraform.io/docs/commands/environment-variables.html#tf_var_name) convention:
 
     $ export TF_VAR_prefix=cbkimmo
 
