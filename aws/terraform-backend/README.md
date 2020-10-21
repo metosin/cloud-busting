@@ -74,4 +74,12 @@ kms_key_id = arn:aws:kms:eu-west-1:<SOME-STRING>
 state_bucket = <PREFIX-YOU-USED>-terraform
 ```
 
+Now you can list the S3 buckets and DynamoDB tables in your account - you should see a bucket and table with your prefix:
+
+```bash
+aws s3 ls
+aws dynamodb list-tables
+```
+
+
 At last, commit `terraform.tfstate` file, which is is local backend state file, into version control, so that the bootstrap state is persisted off your computer.
