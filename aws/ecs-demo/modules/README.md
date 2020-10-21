@@ -8,6 +8,8 @@ This example consists of the following modules:
 
 Your next step is to open terminal in each of these directories and give the following commands (just as you did previously with the backend):
 
-* terraform init
+* source ../../../tools/terraform-init
 * terraform plan
 * terraform apply
+
+NOTE: We replace `terraform init` with our script here (`ource ../../../tools/terraform-init`) - the script populates the correct values for the Terraform state S3 bucket, lock DynamoDB table and the KMS encrytion key that you used when initializing the backend earlier.
