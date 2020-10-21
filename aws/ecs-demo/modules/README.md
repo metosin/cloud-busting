@@ -27,6 +27,10 @@ Also specify the AWS region to use:
     # Set region to Ireland
     $ export AWS_DEFAULT_REGION=eu-west-1
 
+Change the working directory into a module directory:
+
+    $ cd ecs-demo/modules/network
+
 First, initialize the Terraform backend of a module with:
 
     $ source ../../../tools/terraform-init
