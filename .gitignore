@@ -1,1 +1,9 @@
 .terraform
+
+# Personal stuff
+personal/
+
+# IDEA
+.idea/
+cloud-busting.iml
+
