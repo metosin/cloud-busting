@@ -2,16 +2,6 @@
 
 Contains AWS infrastructure examples and tooling to help running Terraform modules that refer to other modules via [remote state](https://www.terraform.io/docs/providers/terraform/d/remote_state.html).
 
-## tools
-
-Contains helpers:
-
-* tools/terraform-init: Helper for running `terraform init` in modules that refer to other modules via `data.terraform_remote_state`
-
-## ecs-demo
-
-A sample web application that runs in Elastic Container Service (ECS) via [Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html).
-
 ## General Usage
 
 The example(s) use a common way of running Terraform, described in the following sections.
@@ -141,3 +131,16 @@ To return to default workspace, run:
 terraform workspace select default
 Switched to workspace "default".
 ```
+
+## Directory listing
+
+## tools
+
+Contains helpers:
+
+* tools/terraform-init: Helper for running `terraform init` in modules that refer to other modules via `data.terraform_remote_state`
+
+## ecs-demo
+
+A sample web application that runs in Elastic Container Service (ECS) via [Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html).
+
