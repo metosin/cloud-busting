@@ -36,3 +36,7 @@ version](https://www.terraform.io/docs/configuration/terraform.html#specifying-a
     Reading required version from terraform file, constraint: = 0.13.4
     Matched version: 0.13.4
     Switched terraform to version "0.13.4"
+
+# Installing AWS CLI
+
+Follow [AWS CLI instructions](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html).
