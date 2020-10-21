@@ -1,4 +1,4 @@
-# bootstrap
+# terraform-backend
 
 Module for creating resources for [Terraform backend state](https://www.terraform.io/docs/backends/index.html) stored in S3, with concurrent operations prevented by a lock in DynamoDB table.
 

@@ -16,7 +16,7 @@ A sample web application that runs in Elastic Container Service (ECS) via [Farga
 
 The example(s) use a common way of running Terraform, described in the following sections.
 
-### AWS Profile
+### AWS Profile and Region
 
 You have to create an AWS profile for yourself. Follow [AWS instructions](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) how to create an AWS profile.
 
@@ -34,7 +34,13 @@ Or you can export the profile so that you don't have to provide it in every terr
 export AWS_PROFILE=your-profile
 ```
 
-### Resource naming
+Also specify the AWS region to use (eu-west-1 is Ireland):
+
+```bash
+export AWS_DEFAULT_REGION=eu-west-1
+```
+
+### Resource Naming
 
 Resources are named in a way that allows multiple instances to co-exist in the same AWS account. A Terraform variable `prefix` is used to store a prefix for the resource name. Workspaces are also used for naming, but this is elaborated a bit later in the workspaces section.
 
@@ -44,12 +50,13 @@ Before running Terraform in a shell, assign a value to the `prefix` variable via
 
 This will make the value visible to all modules that have `prefix` variable definition.
 
-### Running commands
+### Terraform backend initialization
 
-Also specify the AWS region to use:
+Before creating resources, a store for the [Terraform state](https://www.terraform.io/docs/backends/index.html) needs to be created.
 
-    # Set region to Ireland
-    $ export AWS_DEFAULT_REGION=eu-west-1
+See instructions in [terraform-backend](./terraform-backend/README.md).
+
+### Running Commands in Modules
 
 Change the working directory into a module directory:
 
