@@ -1,6 +1,6 @@
 # AWS examples
 
-Contains AWS infrastructure examples and tooling to help running Terraform modules that refer to other modules via [remote state](https://www.terraform.io/docs/providers/terraform/d/remote_state.html).
+Contains AWS infrastructure examples.
 
 ## General Usage
 
