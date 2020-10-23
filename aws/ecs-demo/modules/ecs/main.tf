@@ -61,7 +61,7 @@ resource "aws_ecs_task_definition" "backend" {
     [
       {
         name        = "backend"
-        image       = "${data.terraform_remote_state.ecr.outputs.backend_repository_url}:${var.git_sha}"
+        image       = "${data.terraform_remote_state.ecr.outputs.backend_repository_url}:${var.image_tag}"
         cpu         = var.backend_cpu
         memory      = var.backend_memory
         mountPoints = []
@@ -90,14 +90,15 @@ resource "aws_ecs_task_definition" "backend" {
             value = "4000"
           },
           {
-            name  = "GIT_SHA"
-            value = var.git_sha
+            name  = "IMAGE_TAG"
+            value = var.image_tag
           }
         ]
       }
   ])
 }
 
+# Well create a log group and specify how long to retain logs
 resource "aws_cloudwatch_log_group" "backend" {
   name              = "backend"
   retention_in_days = 365

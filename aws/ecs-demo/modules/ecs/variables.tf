@@ -33,3 +33,7 @@ variable "backend_memory" {
   description = "Memory value for the Fargate task"
   default     = 1024
 }
+
+variable "image_tag" {
+  description = "Docker image tag to run by the service. Usually a Git SHA"
+}
