@@ -195,9 +195,11 @@ You should decide whether to do everything yourself using basic Terraform buildi
 
 ### One Mother Module or Independent Modules
 
-You can create the Terraform solution many ways. One popular solution is to create one mother module in which you import dev/qa/prod values and inject these values to actual modules (e.g. network, rds...) that are imported to the mother module. This strategy makes the overall solution very simple: you can create the whole infrastructure using just one `terraform apply` command. The other side of the coin is that all resources are "bundled in one Terraform state".
+You can create the Terraform solution many ways. One popular solution is to create one mother module in which you import dev/qa/prod values and inject these values to actual modules (e.g. network, rds...) that are imported to the mother module. This strategy makes the overall solution very simple: you can create the whole infrastructure using just one `terraform apply` command. The other side of the coin is that all resources are bundled in one Terraform state of the mother module.
 
-Another solution is to create individual modules which you can create individually and also parameterize them individually. This is the strategy in the "ecs-demo" we have created in the "aws" directory. 
+Another solution is to create individual modules that each have their own state, which you can apply/destroy individually and use output variables to export parameters and read them via `terraform_remote_state` data source in other modules. This approach of linking modules via outputs/remote state corresponds to the ability of passing parameters from one module to another with a shared "mother" module. Also, when scale of the system grows large, stateful modules limit the amount of resources that need to be refreshed during apply/plan/destroy which yields better [performance](https://www.terraform.io/docs/state/purpose.html#performance), without need of disabling refresh. A module with state corresponds to a Stack in Cloudformation, see the [best practices of Cloudformation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html#organizingstacks) for ideas in designing stateful Terraform modules.
+
+The latter strategy is used in the "ecs-demo" we have created in the "aws" directory. 
 
 
   
