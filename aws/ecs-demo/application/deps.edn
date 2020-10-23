@@ -1,6 +1,9 @@
 {:deps    {ring/ring-jetty-adapter     {:mvn/version "1.7.1"}
            viesti/timbre-json-appender {:mvn/version "0.1.0"}
            com.fzakaria/slf4j-timbre   {:mvn/version "0.3.14"}
-           org.slf4j/log4j-over-slf4j  {:mvn/version "1.7.14"}}
+           org.slf4j/log4j-over-slf4j  {:mvn/version "1.7.14"}
+           hikari-cp/hikari-cp         {:mvn/version "2.13.0"}
+           org.postgresql/postgresql   {:mvn/version "42.2.18.jre7"}
+           seancorfield/next.jdbc      {:mvn/version "1.1.610"}}
  :aliases {:pack {:deps {pack/pack.alpha {:git/url "https://github.com/juxt/pack.alpha.git"
                                           :sha     "0e8731e0f24db05b74769e219051b0e92b50624a"}}}}}
