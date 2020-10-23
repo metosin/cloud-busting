@@ -17,3 +17,12 @@ data "terraform_remote_state" "network" {
     bucket = var.state_bucket
   }
 }
+
+data "terraform_remote_state" "ecr" {
+  backend   = "s3"
+  workspace = terraform.workspace
+  config = {
+    key    = "ecs-demo-ecr.tfstate"
+    bucket = var.state_bucket
+  }
+}
