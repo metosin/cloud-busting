@@ -11,11 +11,13 @@ variable "state_bucket" {
 variable "public_port" {
   description = "Port for traffic from public internet"
   type        = number
+  default     = 80
 }
 
 variable "backend_port" {
   description = "Backend traffic port"
   type        = number
+  default     = 4000
 }
 
 variable "elb_account_id" {
