@@ -1,5 +1,6 @@
 locals {
   workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
+  module_name    = "network"
 }
 
 data "aws_availability_zones" "main" {
@@ -13,9 +14,9 @@ resource "aws_vpc" "main" {
     Name      = "${var.prefix}${local.workspace_name}-vpc"
     Prefix    = var.prefix
     Workspace = terraform.workspace
+    Module    = local.module_name
   }
 }
-
 
 resource "aws_subnet" "public" {
   count                   = var.public-subnet-count
@@ -28,6 +29,7 @@ resource "aws_subnet" "public" {
     Name       = "${var.prefix}${local.workspace_name}-public-subnet-${count.index}"
     Prefix     = var.prefix
     Workspace  = terraform.workspace
+    Module     = local.module_name
     SubnetType = "public"
   }
 
@@ -47,6 +49,7 @@ resource "aws_subnet" "private" {
     Name       = "${var.prefix}${local.workspace_name}-private-subnet-${count.index}"
     Prefix     = var.prefix
     Workspace  = terraform.workspace
+    Module     = local.module_name
     SubnetType = "private"
   }
 
@@ -63,13 +66,13 @@ resource "aws_internet_gateway" "main" {
     Name      = "${var.prefix}${local.workspace_name}-igw"
     Prefix    = var.prefix
     Workspace = terraform.workspace
+    Module    = local.module_name
   }
 
   lifecycle {
     create_before_destroy = true
   }
 }
-
 
 resource "aws_eip" "nat" {
   vpc = true
@@ -78,13 +81,13 @@ resource "aws_eip" "nat" {
     Name      = "${var.prefix}${local.workspace_name}-nat-eip"
     Prefix    = var.prefix
     Workspace = terraform.workspace
+    Module    = local.module_name
   }
 
   lifecycle {
     create_before_destroy = true
   }
 }
-
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
@@ -94,13 +97,13 @@ resource "aws_nat_gateway" "nat" {
     Name      = "${var.prefix}${local.workspace_name}-nat-gw"
     Prefix    = var.prefix
     Workspace = terraform.workspace
+    Module    = local.module_name
   }
 
   lifecycle {
     create_before_destroy = true
   }
 }
-
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
@@ -109,6 +112,7 @@ resource "aws_route_table" "public" {
     Name       = "${var.prefix}${local.workspace_name}-public-route-table"
     Prefix     = var.prefix
     Workspace  = terraform.workspace
+    Module     = local.module_name
     SubnetType = "public"
   }
 
@@ -144,6 +148,7 @@ resource "aws_route_table" "private" {
     Name       = "${var.prefix}${local.workspace_name}-private-route-table"
     Prefix     = var.prefix
     Workspace  = terraform.workspace
+    Module     = local.module_name
     SubnetType = "private"
   }
 
