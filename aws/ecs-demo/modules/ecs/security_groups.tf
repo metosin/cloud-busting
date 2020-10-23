@@ -15,7 +15,7 @@ resource "aws_security_group_rule" "lb-ingress" {
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
 
-  security_group_id = aws_security_group.lb
+  security_group_id = aws_security_group.lb.id
 }
 
 # Allow outbound traffic
@@ -28,7 +28,7 @@ resource "aws_security_group_rule" "lb-egress" {
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
 
-  security_group_id = aws_security_group.lb
+  security_group_id = aws_security_group.lb.id
 }
 
 # Security group for the backends that run the application.
@@ -49,7 +49,7 @@ resource "aws_security_group_rule" "backend-ingress" {
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.lb.id
 
-  security_group_id = aws_security_group.backend
+  security_group_id = aws_security_group.backend.id
 }
 
 # Allow outbound traffic from the backends
@@ -62,5 +62,5 @@ resource "aws_security_group_rule" "backend-egress" {
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
 
-  security_group_id = aws_security_group.lb
+  security_group_id = aws_security_group.backend.id
 }

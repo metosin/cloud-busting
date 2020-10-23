@@ -22,7 +22,7 @@ resource "aws_ecs_cluster" "backend" {
 # Service will keep a desired amount of docker containers always running
 # Service can also be attached to a load balancer for HTTP, TCP or UDP traffic
 resource "aws_ecs_service" "backend" {
-  name            = "backend"
+  name            = "${local.prefix_name}-backend"
   cluster         = aws_ecs_cluster.backend.id
   task_definition = aws_ecs_task_definition.backend.arn
   desired_count   = 2
@@ -33,7 +33,7 @@ resource "aws_ecs_service" "backend" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.backend.arn
-    container_name   = "backend"
+    container_name   = "${local.prefix_name}-backend"
     container_port   = var.backend_port
   }
 
@@ -50,7 +50,7 @@ data "aws_region" "current" {}
 
 # Task definition is a description of parameters given to docker daemon, in order to run a container
 resource "aws_ecs_task_definition" "backend" {
-  family                   = "backend"
+  family                   = "${local.prefix_name}-backend"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   # This is the IAM role that the docker daemon will use, e.g. for pulling the image from ECR (AWS's own docker repository)
@@ -60,7 +60,7 @@ resource "aws_ecs_task_definition" "backend" {
   container_definitions = jsonencode(
     [
       {
-        name        = "backend"
+        name        = "${local.prefix_name}-backend"
         image       = "${data.terraform_remote_state.ecr.outputs.backend_repository_url}:${var.image_tag}"
         cpu         = var.backend_cpu
         memory      = var.backend_memory
@@ -80,8 +80,9 @@ resource "aws_ecs_task_definition" "backend" {
         logConfiguration = {
           logDriver = "awslogs"
           options = {
-            awslogs-group  = aws_cloudwatch_log_group.backend.name
-            awslogs-region = data.aws_region.current.name
+            awslogs-group         = aws_cloudwatch_log_group.backend.name
+            awslogs-region        = data.aws_region.current.name
+            awslogs-stream-prefix = "${local.prefix_name}-backend-"
           }
         },
         environment = [
@@ -100,13 +101,13 @@ resource "aws_ecs_task_definition" "backend" {
 
 # Well create a log group and specify how long to retain logs
 resource "aws_cloudwatch_log_group" "backend" {
-  name              = "backend"
+  name              = "${local.prefix_name}-backend"
   retention_in_days = 365
 }
 
 # This IAM role will be used by the docker daemon
 resource "aws_iam_role" "backend" {
-  name = "backend"
+  name = "${local.prefix_name}-backend"
   assume_role_policy = jsonencode(
     {
       Version = "2012-10-17"
