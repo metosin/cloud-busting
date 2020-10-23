@@ -42,6 +42,12 @@ export TF_VAR_prefix=cbkimmo
 
 This will make the value visible to all modules that have `prefix` variable definition.
 
+We have made this part easier for you. Populate your own values in [aws-envs.sh](tools/aws-envs.sh) script and call it in each module you are using:
+
+```bash
+source aws-envs.sh
+```
+
 ### Terraform backend initialization
 
 Before creating resources, a store for the [Terraform state](https://www.terraform.io/docs/backends/index.html) needs to be created.
@@ -150,3 +156,48 @@ Contains helpers:
 
 A sample web application that runs in Elastic Container Service (ECS) via [Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html).
 
+## Production Considerations
+
+The demos are simplified for brewity for educational purposes. In real productions systems you should consider the following options.
+
+- Bastion or Parameter Store solution: short explanation
+
+### Vars files.
+
+- Vars files for various environments, e.g. dev-vars.tf, qa-vars.tf. In real world projects you should be able to inject e.g. various instance sizes. TODO: selitä tässä, esimerkki network modulin vars-hakemistossa
+
+Examples in the network module:
+
+Using `dev` values:
+
+```bash
+terraform plan -var-file=vars/dev.tfvars
+``` 
+
+Using `prod` values:
+
+```bash
+terraform plan -var-file=vars/prod.tfvars
+``` 
+
+### Bastion Host or AWS TODO
+
+- Bastion or Parameter Store solution: short explanation
+
+### Secrets
+
+- Secrets management. TODO: Kimmo.  TODO. vaihtoehdot: AWS Secrets Manager, TODO: Kimmon ratkaisu: tapa, miten työnnetään salaisuus SecretsManageriin..., lyhyt selitys niistä
+
+
+### Do It Yourself or Use Terraform Registry
+
+You should decide whether to do everything yourself using basic Terraform building blocks (e.g. ) or using [Terraform Registry Modules](https://registry.terraform.io/browse/providers). Example. You can create an RDS either using the [Terraform Registry Module RDS](https://registry.terraform.io/modules/terraform-aws-modules/rds/aws/latest) or building your RDS module yourself using [db_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance) and other Terraform basic building blocks. In this example we have used the Terraform basic building blocks.
+
+### One Mother Module or Independent Modules
+
+You can create the Terraform solution many ways. One popular solution is to create one mother module in which you import dev/qa/prod values and inject these values to actual modules (e.g. network, rds...) that are imported to the mother module. This strategy makes the overall solution very simple: you can create the whole infrastructure using just one `terraform apply` command. The other side of the coin is that all resources are "bundled in one Terraform state".
+
+Another solution is to create individual modules which you can create individually and also parameterize them individually. This is the strategy in the "ecs-demo" we have created in the "aws" directory. 
+
+
+  
