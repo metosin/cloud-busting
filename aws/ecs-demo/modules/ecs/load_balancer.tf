@@ -24,6 +24,10 @@ resource "aws_lb" "backend" {
 resource "aws_s3_bucket" "lb-logs" {
   bucket = "${local.prefix_name}-access-logs"
   acl    = "private"
+
+  # Destroy the bucket and all files when removing the bucket
+  # For production, one might want to disable this
+  force_destroy = true
 }
 
 # Objects in this bucket will be private
