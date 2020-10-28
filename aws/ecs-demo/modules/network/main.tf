@@ -31,6 +31,7 @@ resource "aws_subnet" "public" {
     Workspace  = terraform.workspace
     Module     = local.module_name
     SubnetType = "public"
+    Terraform = "true"
   }
 
   lifecycle {
@@ -51,6 +52,7 @@ resource "aws_subnet" "private" {
     Workspace  = terraform.workspace
     Module     = local.module_name
     SubnetType = "private"
+    Terraform = "true"
   }
 
   lifecycle {
@@ -67,6 +69,7 @@ resource "aws_internet_gateway" "main" {
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
+    Terraform = "true"
   }
 
   lifecycle {
@@ -82,6 +85,7 @@ resource "aws_eip" "nat" {
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
+    Terraform = "true"
   }
 
   lifecycle {
@@ -98,6 +102,7 @@ resource "aws_nat_gateway" "nat" {
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
+    Terraform = "true"
   }
 
   lifecycle {
@@ -114,6 +119,7 @@ resource "aws_route_table" "public" {
     Workspace  = terraform.workspace
     Module     = local.module_name
     SubnetType = "public"
+    Terraform = "true"
   }
 
   lifecycle {
@@ -150,6 +156,7 @@ resource "aws_route_table" "private" {
     Workspace  = terraform.workspace
     Module     = local.module_name
     SubnetType = "private"
+    Terraform = "true"
   }
 
   lifecycle {

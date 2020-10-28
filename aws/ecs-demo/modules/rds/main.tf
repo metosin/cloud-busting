@@ -13,6 +13,7 @@ resource "aws_security_group" "database" {
   description = "Database security group"
   vpc_id      = data.aws_vpc.main.id
 
+  # TODO: should this be so that we allow access only from bastion and ECS (app)?
   ingress {
     description = "Allow traffic from VPC to RDS"
     from_port   = var.rds_port
@@ -36,6 +37,7 @@ resource "aws_security_group" "database" {
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
+    Terraform = "true"
   }
 }
 
@@ -48,6 +50,7 @@ resource "aws_db_subnet_group" "database" {
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
+    Terraform = "true"
   }
 }
 
@@ -58,6 +61,7 @@ resource "aws_kms_key" "rds_key" {
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
+    Terraform = "true"
   }
 }
 
@@ -83,6 +87,7 @@ resource "aws_db_parameter_group" "database" {
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
+    Terraform = "true"
   }
 }
 
@@ -129,6 +134,7 @@ resource "aws_db_instance" "database" {
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
+    Terraform = "true"
   }
 }
 

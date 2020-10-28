@@ -1,6 +1,53 @@
 # Bastion module
 
-Bastion module for accessing VPC resource (such as the RDS/PostgreSQL database) via a SSH tunnel.
+You are going to need the RDS url later, let's first get it using `aws cli`:
+
+```bash
+aws rds describe-db-instances | grep com
+# Output like:
+               "Address": "cbtommi-database.ceiazeowmhxx.eu-west-1.rds.amazonaws.com",
+```
+
+Bastion module for accessing other resources like RDS via a SSH tunnel.
+
+This module requires you to provide the developer IPs. We need the IP(s) to open ssh port 22 only for those IP(s). You can export the terraform variable like this before the `terraform apply` command:
+ 
+ ```bash
+ export TF_VAR_developer_ips='["88.195.214.218/32", "88.195.214.219/32"]'
+```
+
+When you have applied `terraform apply` command you should get an output  listing the bastion public IP:
+
+```bash
+Outputs:
+ec2_eip_public_ip = 54.155.131.99
+```
+
+This module generates a shh key pair, the private key is stored in the `.ssh` directory of this module, the public key is installed in the bastion. Use the private key to connect to bastion using the IP number that you got as output (the username is `ec2-user`):
+
+```bash
+ssh -i .ssh/ec2_id_rsa ec2-user@54.155.131.99
+# Output like:
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+[ec2-user@ip-10-0-0-209 ~]$ 
+```
+
+Install PostgreSQL client and try to connect to RDS (use RDS url you queried earlier using aws cli).
+
+```bash
+sudo amazon-linux-extras install postgresql11 epel
+sudo yum install emacs-nox
+emacs -nw jee.txt # Ok, you don't need this line, just testing that we have Emacs.
+psql -h <RDS-URL-HERE> -p 5432 -U
+# Provide password, you should see the psql prompt next:
+ecsdemo=> 
+```
+
+
 
 ## TODO
 
