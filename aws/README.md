@@ -48,7 +48,7 @@ We have made this part easier for you. Populate your own values in [aws-envs.sh]
 source aws-envs.sh
 ```
 
-### Terraform backend initialization
+### Terraform backend creation
 
 Before creating resources, a store for the [Terraform state](https://www.terraform.io/docs/backends/index.html) needs to be created.
 
@@ -173,8 +173,44 @@ terraform plan -var-file=vars/prod.tfvars
 
 ### Secrets
 
-- Secrets management. TODO: Kimmo.  TODO. vaihtoehdot: AWS Secrets Manager, TODO: Kimmon ratkaisu: tapa, miten työnnetään salaisuus SecretsManageriin..., lyhyt selitys niistä
+In Terraform, all resource attributes are stored into the Terraform backend state, including [sensetive data](https://www.terraform.io/docs/state/sensitive-data.html), for example the password of a master user of RDS/PostgreSQL instance. This is why the backend state file is encrypted at rest with a [KMS](https://docs.aws.amazon.com/kms/latest/developerguide/overview.html) key.
 
+With tools such as Ansible, it is common to use [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html) to store secrets into symmetrically encrypted files that are stored in version control (or encrypt specific variables by encrypting the variable string itself). Managing the access to the encryption key is then left to the project or operations team.
+
+With Terraform, there isn't a single specific solution for this task. In this demo, we've chosen to use a tool by Mozilla called [Sops](https://github.com/mozilla/sops): Secrets OPerationS.
+
+The `sops` tool takes a similar approach to Ansible Vault when encrypting string variables. The `sops` tool can be used to encrypt the **values** of JSON or YAML formatted data.
+
+We use a Terraform provider, [terraform-provider-sops](https://github.com/carlpett/terraform-provider-sops) to integrate `sops` into Terraform. The provider is used to decrypt a file encrypted with `sops` and read values into Terraform resources.
+
+This way, we can store an encrypted file into version control and decrypt the contents into use by Terraform.
+
+#### Sops usage
+
+The [terraform-backend](./terraform-backend) module used to setup the S3 based backend contains also a [KMS key](https://github.com/metosin/cloud-busting/blob/main/aws/terraform-backend/main.tf#L95) used for encrypting secrets with `sops`. As per [sops documentation](https://github.com/mozilla/sops#usage), the key ARN is made available for the [terraform sops provider]([terraform-provider-sops](https://github.com/carlpett/terraform-provider-sops)) via the [`terraform-init`](https://github.com/metosin/cloud-busting/blob/main/aws/tools/terraform-init#L13) script that we use for helping to run `terraform init` command.
+
+1. Install Sops by downloading a binary and putting it into `$PATH` from: https://github.com/mozilla/sops/releases
+2. Make sure a module is initialized, by following [Terraform backend creation](#terraform-backend-creation) and [Running Commands in Modules](#running-commands-in-modules)
+3. Create or edit an encrypted file via:
+```bash
+sops vars/secrets.json
+# Edit for example
+{
+  "password": "abc"
+}
+```
+4. Use the secrets in Terraform code via `sops_file` [data source](https://www.terraform.io/docs/configuration/data-sources.html), e.g.
+```hcl
+data "sops_file" "secrets" {
+  source_file = "vars/secrets_dev.json"
+}
+
+resource "aws_db_instance" "database" {
+...
+password = data.sops_file.secrets.data["password"]
+```
+
+See the [RDS module](ecs-demo/modules/rds) for an example use.
 
 ### Do It Yourself or Use Terraform Registry
 
