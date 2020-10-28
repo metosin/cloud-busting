@@ -115,7 +115,9 @@ resource "aws_db_instance" "database" {
   kms_key_id                          = aws_kms_key.rds_key.arn
   performance_insights_enabled        = true
   performance_insights_kms_key_id     = aws_kms_key.rds_key.arn
-  # TODO: LATER: monitoring requires a MonitoringRoleARN
+  # TODO
+  # If you need enhanced monitoring:
+  # Monitoring requires a MonitoringRoleARN
   # monitoring_role_arn                 = "TODO"
   # monitoring_interval                 = 60
   parameter_group_name                = aws_db_parameter_group.database.id
