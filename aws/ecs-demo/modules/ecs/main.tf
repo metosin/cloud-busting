@@ -109,7 +109,7 @@ resource "aws_cloudwatch_log_group" "backend" {
 
 # This IAM role will be used by the docker daemon
 resource "aws_iam_role" "backend" {
-  name = "${local.prefix_name}-backend"
+  name = "${local.prefix_name}-backend-execution"
   assume_role_policy = jsonencode(
     {
       Version = "2012-10-17"
