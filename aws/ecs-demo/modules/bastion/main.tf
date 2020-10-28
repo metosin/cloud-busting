@@ -10,14 +10,21 @@ locals {
   }
 }
 
+# We'll generate a SSH keypair with the tls_private_key resource
 resource "tls_private_key" "ec2-ssh-key" {
   algorithm = "RSA"
 }
 
+# As the name suggests, a null_resource does not create a resoure, but use it to hook into creation time lifecycle for side effects.
+# https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource
 resource "null_resource" "ec2-save-ssh-key" {
+  # We specify when the resource should be re-created, here, when the tls_private_key changes
   triggers = {
     key = tls_private_key.ec2-ssh-key.private_key_pem
   }
+
+  # Every resource has a lifecycle, and we use the creation time lifecycle to write out the private key from Terraform state. 
+  # (https://www.terraform.io/docs/provisioners/index.html#creation-time-provisioners)
   provisioner "local-exec" {
     command = <<EOF
       mkdir -p ${path.module}/.ssh
@@ -27,6 +34,7 @@ EOF
   }
 }
 
+# We use the generated SSH keypair as the SSH key for the bastion instance
 resource "aws_key_pair" "ec2-key-pair" {
   key_name   = "${var.prefix}${local.workspace_name}-ec2-key-pair"
   public_key = tls_private_key.ec2-ssh-key.public_key_openssh
@@ -36,6 +44,7 @@ resource "aws_key_pair" "ec2-key-pair" {
   })
 }
 
+# We create a IAM role for the instance, for later use (for example SSM agent)
 resource "aws_iam_role" "ec2-role" {
   name               = "${var.prefix}${local.workspace_name}-ec2-iam-role"
   path               = "/"
