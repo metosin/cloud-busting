@@ -9,3 +9,7 @@ output "dynamodb_table" {
 output "state_bucket" {
   value = aws_s3_bucket.terraform.id
 }
+
+output "sops_kms_key_id" {
+  value = aws_kms_key.sops.arn
+}

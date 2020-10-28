@@ -90,3 +90,14 @@ resource "aws_dynamodb_table" "terraform" {
 
   hash_key = "LockID"
 }
+
+# Key for encrypting secrets with SOPS: https://github.com/mozilla/sops
+resource "aws_kms_key" "sops" {
+  description = "Key for encrypting secrets with sops"
+}
+
+# Alias for the key makes it easier to find the key by name
+resource "aws_kms_alias" "sops" {
+  name          = "alias/${var.prefix}-sops"
+  target_key_id = aws_kms_key.sops.key_id
+}

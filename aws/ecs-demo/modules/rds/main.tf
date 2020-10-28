@@ -86,6 +86,10 @@ resource "aws_db_parameter_group" "database" {
   }
 }
 
+data "sops_file" "secrets" {
+  source_file = "vars/secrets_dev.json"
+}
+
 resource "aws_db_instance" "database" {
   identifier                          = "${var.prefix}${local.workspace_name}-database"
   allocated_storage                   = var.allocated_storage
@@ -98,7 +102,7 @@ resource "aws_db_instance" "database" {
   name                                = "ecsdemo"
   username                            = "ecsdemo"
   # TODO: How to inject the password.
-  password                            = "TODOTODO"
+  password                            = data.sops_file.secrets.data["rds_master_password"]
   port                                = var.rds_port
   maintenance_window                  = var.maintenance_window
   backup_window                       = var.backup_window
