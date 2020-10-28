@@ -10,6 +10,6 @@ output "state_bucket" {
   value = aws_s3_bucket.terraform.id
 }
 
-output "sops_kms_key_id" {
+output "sops_kms_key_arn" {
   value = aws_kms_key.sops.arn
 }

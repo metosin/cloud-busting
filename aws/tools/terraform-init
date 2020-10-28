@@ -3,11 +3,17 @@
 TERRAFORM_BACKEND_DIR=$(pwd)/../../../terraform-backend
 
 pushd $TERRAFORM_BACKEND_DIR > /dev/null
+# Bucket for storing state files, DynamoDB table for protecting concurrent state file modifications and KMS key arn for
+# encrypting the state file at rest
 STATE_BUCKET=$(terraform output state_bucket)
 DYNAMODB_TABLE=$(terraform output dynamodb_table)
 KMS_KEY_ID=$(terraform output kms_key_id)
+
+# Make KMS key for SOPS available
+SOPS_KMS_ARN=$(terraform output sops_kms_key_arn)
 popd > /dev/null
 
+# Define the value of `state_file` input variable, used in terraform_remote_state data sources
 export TF_VAR_state_bucket=$STATE_BUCKET
 
 terraform init \
