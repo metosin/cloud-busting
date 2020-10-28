@@ -48,6 +48,8 @@ resource "aws_s3_bucket_public_access_block" "lb-logs" {
 data "aws_caller_identity" "current" {}
 
 # We allow the AWS load balancing service to write logs into the log bucket
+# The ELB service accounts are listed at: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
+# Here, we specify the account in var.elb_account_id input variable.
 resource "aws_s3_bucket_policy" "lb-logs" {
   bucket = aws_s3_bucket.lb-logs.id
 
