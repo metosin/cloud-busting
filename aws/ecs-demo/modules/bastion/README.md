@@ -1,11 +1,11 @@
 # Bastion module
 
-You are going to need the RDS url later, let's first get it using `aws cli`:
+You are going to need the RDS DNS name later, let's first get it using `aws cli`, by narrowing the DB instance listing with a [JMESPath](https://jmespath.org/) query:
 
 ```bash
-aws rds describe-db-instances | grep com
+aws rds describe-db-instances --query 'DBInstances[0].Endpoint.Address' --out text
 # Output like:
-               "Address": "cbtommi-database.ceiazeowmhxx.eu-west-1.rds.amazonaws.com",
+cbtommi-database.ceiazeowmhxx.eu-west-1.rds.amazonaws.com
 ```
 
 Bastion module for accessing other resources like RDS via a SSH tunnel.
