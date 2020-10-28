@@ -143,19 +143,6 @@ To return to default workspace, run:
 terraform workspace select default
 Switched to workspace "default".
 ```
-
-## Directory listing
-
-## tools
-
-Contains helpers:
-
-* tools/terraform-init: Helper for running `terraform init` in modules that refer to other modules via `data.terraform_remote_state`
-
-## ecs-demo
-
-A sample web application that runs in Elastic Container Service (ECS) via [Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html).
-
 ## Production Considerations
 
 The demos are simplified for brewity for educational purposes. In real productions systems you should consider the following options.
@@ -201,5 +188,14 @@ Another solution is to create individual modules that each have their own state,
 
 The latter strategy is used in the "ecs-demo" we have created in the "aws" directory. 
 
+## Directory listing
 
-  
+## tools
+
+Contains helpers:
+
+* tools/terraform-init: Helper for running `terraform init` in modules that refer to other modules via `data.terraform_remote_state`
+
+## ecs-demo
+
+A sample web application that runs in Elastic Container Service (ECS) via [Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html).
