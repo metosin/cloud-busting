@@ -55,6 +55,8 @@ resource "aws_ecs_task_definition" "backend" {
   requires_compatibilities = ["FARGATE"]
   # This is the IAM role that the docker daemon will use, e.g. for pulling the image from ECR (AWS's own docker repository)
   execution_role_arn = aws_iam_role.backend.arn
+  # If the containers in the task definition need to access AWS services, we'd specify a role via task_role_arn.
+  # task_role_arn = ...
   cpu                = var.backend_cpu
   memory             = var.backend_memory
   container_definitions = jsonencode(
