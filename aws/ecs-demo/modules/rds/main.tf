@@ -92,7 +92,7 @@ resource "aws_db_parameter_group" "database" {
 }
 
 data "sops_file" "secrets" {
-  source_file = "vars/secrets_dev.json"
+  source_file = "vars/secrets.json"
 }
 
 resource "aws_db_instance" "database" {
