@@ -106,7 +106,6 @@ resource "aws_db_instance" "database" {
   instance_class                      = var.instance_class
   name                                = "ecsdemo"
   username                            = "ecsdemo"
-  # TODO: How to inject the password.
   password                            = data.sops_file.secrets.data["rds_master_password"]
   port                                = var.rds_port
   maintenance_window                  = var.maintenance_window
