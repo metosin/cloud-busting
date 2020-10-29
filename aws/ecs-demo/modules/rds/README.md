@@ -20,6 +20,7 @@ sops vars/secrets.json
   "rds_master_password": "<your password, e.g. `openssl rand -hex 32`>"
 }
 ```
+3. Commit `vars/secrets.json` into version control
 
 This way, we can store an encrypted file into version control and decrypt the contents into use by Terraform.
 
