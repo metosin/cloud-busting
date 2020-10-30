@@ -1,5 +1,10 @@
 # Bastion module
 
+TODO: Tähän idea bastionista:
+- Bastion on ephemeral: luodaan on-demand. Kun ei tarvita, niin tuhotaan, jolloin myös avain tuhoutuu.
+- Kun bastion luodaan per käyttäjä on-demand ja bastion ei ole muuna aikana ylhäällä, niin vähennetään hyökkäyspintaa.
+
+
 You are going to need the RDS DNS name later, let's first get it using `aws cli`, by narrowing the DB instance listing with a [JMESPath](https://jmespath.org/) query:
 
 ```bash
