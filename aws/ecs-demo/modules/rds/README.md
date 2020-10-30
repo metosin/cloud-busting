@@ -32,7 +32,8 @@ Hint: Use for example `openssl rand -hex 32` to generate a password.
 
 4. Commit `vars/secrets.json` into version control
 ```bash
-git commit -a
+git add vars/secrets.json
+git commit -m "Specify rds master user password"
 ```
 
 This way, we can store an encrypted file into version control and decrypt the contents into use by Terraform.
