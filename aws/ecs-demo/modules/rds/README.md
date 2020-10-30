@@ -10,17 +10,30 @@ When creating a RDS instance, a single user is created, called the master user, 
 
 In this example, we've chosen to use the [sops](https://github.com/mozilla/sops) tool by Mozilla. As per the [general secrets instructions](https://github.com/metosin/cloud-busting/blob/main/aws/README.md#secrets), **before** running `plan` or `apply` commands, specify the password in a file encrypted with a KMS key created when the Terraform backend was created:
 
-1. Create `vars/secrets.json` with
+1. Initialize the module
+```bash
+source ../../../tools/terraform-init
+```
+
+2. Create `vars/secrets.json` with
 ```bash
 sops vars/secrets.json
 ```
-2. Specify the password
-```bash
+
+This will open an editor with sample JSON content content. Replace the content with the following:
+
+```json
 {
-  "rds_master_password": "<your password, e.g. `openssl rand -hex 32`>"
+  "rds_master_password": "very-secret-string"
 }
 ```
-3. Commit `vars/secrets.json` into version control
+
+Hint: Use for example `openssl rand -hex 32` to generate a password.
+
+4. Commit `vars/secrets.json` into version control
+```bash
+git commit -a
+```
 
 This way, we can store an encrypted file into version control and decrypt the contents into use by Terraform.
 
