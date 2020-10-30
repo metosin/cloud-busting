@@ -178,32 +178,13 @@ We use a Terraform provider, [terraform-provider-sops](https://github.com/carlpe
 
 This way, we can store an encrypted file into version control and decrypt the contents into use by Terraform.
 
-#### Sops usage
+#### Sops installation
 
-The [terraform-backend](./terraform-backend) module used to setup the S3 based backend contains also a [KMS key](https://github.com/metosin/cloud-busting/blob/main/aws/terraform-backend/main.tf#L95) used for encrypting secrets with `sops`. As per [sops documentation](https://github.com/mozilla/sops#usage), the key ARN is made available for the [terraform sops provider]([terraform-provider-sops](https://github.com/carlpett/terraform-provider-sops)) via the [`terraform-init`](https://github.com/metosin/cloud-busting/blob/main/aws/tools/terraform-init#L13) script that we use for helping to run `terraform init` command.
+Install Sops from: https://github.com/mozilla/sops/releases (download and install package, or download the binary and put it into `$PATH`).
 
-1. Install Sops from: https://github.com/mozilla/sops/releases (download and install package, or download the binary and put it into `$PATH`)
-2. Make sure a module is initialized, by following [Terraform backend creation](#terraform-backend-creation) and [Running Commands in Modules](#running-commands-in-modules)
-3. Create or edit an encrypted file via:
-```bash
-sops vars/secrets.json
-# Edit for example
-{
-  "password": "abc"
-}
-```
-4. Use the secrets in Terraform code via `sops_file` [data source](https://www.terraform.io/docs/configuration/data-sources.html), e.g.
-```hcl
-data "sops_file" "secrets" {
-  source_file = "vars/secrets_dev.json"
-}
+The [terraform-backend](./terraform-backend) module used to setup the S3 based backend contains also a [KMS key](https://github.com/metosin/cloud-busting/blob/main/aws/terraform-backend/main.tf#L95) used for encrypting secrets with `sops`. As per [sops documentation](https://github.com/mozilla/sops#usage), the key ARN is made available for the [terraform sops provider]([terraform-provider-sops](https://github.com/carlpett/terraform-provider-sops)) via the [`terraform-init`](https://github.com/metosin/cloud-busting/blob/main/aws/tools/terraform-init#L13) script.
 
-resource "aws_db_instance" "database" {
-...
-password = data.sops_file.secrets.data["password"]
-```
-
-See the [RDS module](ecs-demo/modules/rds) for an example use.
+See the [RDS module](ecs-demo/modules/rds) for an example use, but first create resources in the network module!
 
 ### Do It Yourself or Use Terraform Registry
 
