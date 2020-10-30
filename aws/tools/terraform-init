@@ -10,7 +10,7 @@ DYNAMODB_TABLE=$(terraform output dynamodb_table)
 KMS_KEY_ID=$(terraform output kms_key_id)
 
 # Make KMS key for SOPS available
-SOPS_KMS_ARN=$(terraform output sops_kms_key_arn)
+export SOPS_KMS_ARN=$(terraform output sops_kms_key_arn)
 popd > /dev/null
 
 # Define the value of `state_file` input variable, used in terraform_remote_state data sources

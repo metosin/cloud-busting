@@ -6,3 +6,6 @@ router tables that route traffic to internet gateway from the public subnet and 
 # Explanation
 
 TODO: here short explanation to the resources and why they are created...
+
+TODO: Diagram regarding the network topology.
+

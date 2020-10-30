@@ -4,6 +4,23 @@ A web application that is deployed to AWS via Terraform and is run in Elastic Co
 runtime, reads data from a RDS/PostgreSQL data store and is accessible from public internet via a Application Load
 Balancer (ALB).
 
+TODO: diagrams using mermaid or graphviz
+
+TODO: Module dependency graph ()
+- ecr
+- network
+-- ecs
+-- rds 
+---- bastion
+
+
+TODO: Painota, että tämä demo on mahdollisimman todenmukainen refe-toteutus, ja sen takia demossa on jonkin verran manuaalisia one-time taskeja. Olisimme voineet myös tehdä demon, jossa yhdellä komennolla saa koko infran aikaan, mutta päädyimme sen sijaan todenmukaisempaan ratkaisuun, jossa on mukana terraform modulien joustavuus ja oikean projektin tietoturva.
+
+
+TODO: Demo-käsikirjoitus pitää olla todella selkeä ja se pitää harjoitella pari kertaa läpi, ettei tule virheitä eikä väärinkäsityksiä!
+
+
+
 
 # TODO
 

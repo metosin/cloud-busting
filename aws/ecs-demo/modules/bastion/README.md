@@ -13,7 +13,7 @@ Bastion module for accessing other resources like RDS via a SSH tunnel.
 This module requires you to provide the developer IPs. We need the IP(s) to open ssh port 22 only for those IP(s). You can export the terraform variable like this before the `terraform apply` command:
  
  ```bash
- export TF_VAR_developer_ips='["88.195.214.218/32", "88.195.214.219/32"]'
+ export TF_VAR_developer_ips='["88.197.213.214/32", "88.191.114.113/32"]'
 ```
 
 When you have applied `terraform apply` command you should get an output  listing the bastion public IP:
@@ -36,16 +36,15 @@ https://aws.amazon.com/amazon-linux-2/
 [ec2-user@ip-10-0-0-209 ~]$ 
 ```
 
-Install PostgreSQL client and try to connect to RDS (use RDS url you queried earlier using aws cli).
+Now you can create ssh tunnel via bastio to RDS instance:
 
 ```bash
-sudo amazon-linux-extras install postgresql11 epel
-sudo yum install emacs-nox
-emacs -nw jee.txt # Ok, you don't need this line, just testing that we have Emacs.
-psql -h <RDS-URL-HERE> -p 5432 -U
-# Provide password, you should see the psql prompt next:
-ecsdemo=> 
+./create-ssh-rds-tunnel.sh <LOCAL-PORT-NUMBER>
 ```
+
+E.g. `./create-ssh-rds-tunnel.sh 6666`
+
+Once the tunnel is ready you can use psql client to connect to the database using the ssh tunnel.
 
 
 
