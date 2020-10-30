@@ -137,3 +137,8 @@ resource "aws_db_instance" "database" {
   }
 }
 
+resource "aws_ssm_parameter" "rds_master_password" {
+  name = "/rds/master_password"
+  type = "SecureString"
+  value = data.sops_file.secrets.data["rds_master_password"]
+}

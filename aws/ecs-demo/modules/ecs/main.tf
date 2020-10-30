@@ -54,7 +54,7 @@ resource "aws_ecs_task_definition" "backend" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   # This is the IAM role that the docker daemon will use, e.g. for pulling the image from ECR (AWS's own docker repository)
-  execution_role_arn = aws_iam_role.backend.arn
+  execution_role_arn = aws_iam_role.backend-task-execution.arn
   # If the containers in the task definition need to access AWS services, we'd specify a role via task_role_arn.
   # task_role_arn = ...
   cpu                = var.backend_cpu
@@ -84,7 +84,7 @@ resource "aws_ecs_task_definition" "backend" {
           options = {
             awslogs-group         = aws_cloudwatch_log_group.backend.name
             awslogs-region        = data.aws_region.current.name
-            awslogs-stream-prefix = "${local.prefix_name}-backend-"
+            awslogs-stream-prefix = "${local.prefix_name}-backend"
           }
         },
         environment = [
@@ -95,6 +95,29 @@ resource "aws_ecs_task_definition" "backend" {
           {
             name  = "IMAGE_TAG"
             value = var.image_tag
+          },
+          {
+            name = "DB_HOST"
+            value = data.terraform_remote_state.rds.outputs.rds_address
+          },
+          {
+            name = "DB_PORT"
+            value = tostring(data.terraform_remote_state.rds.outputs.rds_port)
+          },
+          {
+            name = "DB_NAME"
+            value = data.terraform_remote_state.rds.outputs.database_name
+          },
+          {
+            name = "DB_USER"
+            # Note that for actual production use, you would create a less privileged user into the DB instance
+            value = data.terraform_remote_state.rds.outputs.master_user_name
+          }
+        ]
+        secrets = [
+          {
+            name = "DB_PASSWORD"
+            valueFrom = data.terraform_remote_state.rds.outputs.master_password_ssm_parameter_name
           }
         ]
       }
@@ -108,8 +131,8 @@ resource "aws_cloudwatch_log_group" "backend" {
 }
 
 # This IAM role will be used by the docker daemon
-resource "aws_iam_role" "backend" {
-  name = "${local.prefix_name}-backend-execution"
+resource "aws_iam_role" "backend-task-execution" {
+  name = "${local.prefix_name}-backend-task-execution"
   assume_role_policy = jsonencode(
     {
       Version = "2012-10-17"
@@ -128,6 +151,33 @@ resource "aws_iam_role" "backend" {
 # The IAM role above will be allowed to pull docker image from ECR, and to create Cloudwatch log groups
 # See: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html
 resource "aws_iam_role_policy_attachment" "backend" {
-  role       = aws_iam_role.backend.name
+  role       = aws_iam_role.backend-task-execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+# The DB instance password is encrypted with the default SSM service KMS key
+# We lookup the key ARN via a data source
+data "aws_kms_key" "default-ssm-key" {
+  key_id = "alias/aws/ssm"
+}
+
+# We create a policy to allow the docker daemon to read the database password from an encrypted SSM parameter
+resource "aws_iam_role_policy" "secrets-for-docker" {
+  name = "${local.prefix_name}-container-secrets"
+  role = aws_iam_role.backend-task-execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = [
+        "ssm:GetParameters",
+        "kms:Decrypt"
+      ],
+      Resource = [
+        "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter${data.terraform_remote_state.rds.outputs.master_password_ssm_parameter_name}",
+        data.aws_kms_key.default-ssm-key.arn
+      ]
+      Effect = "Allow"
+    }]
+  })
 }

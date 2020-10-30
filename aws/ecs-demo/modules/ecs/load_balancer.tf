@@ -118,6 +118,10 @@ resource "aws_lb_target_group" "backend" {
     timeout             = 5
     unhealthy_threshold = 2
   }
+
+  depends_on = [
+    aws_lb.backend
+  ]
 }
 
 # The default route will point all traffic to the target group
