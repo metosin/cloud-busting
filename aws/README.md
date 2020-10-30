@@ -6,23 +6,16 @@ Contains AWS infrastructure examples.
 
 The example(s) use a common way of running Terraform, described in the following sections.
 
-### AWS Profile and Region
+### Setting Environment Variables for AWS Profile and Region
 
 You have to create an AWS profile for yourself. Follow [AWS instructions](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) how to create an AWS profile.
 
-From now on we assume that you use your AWS profile in each terraform and aws cli command. Example:
-
-```bash
-AWS_PROFILE=your-profile terraform apply
-```
-
-Where `your-profile` is your aws profile in your `~/.aws/credentials` file as described in the previous documentation.
-
-Or you can export the profile so that you don't have to provide it in every terraform and aws cli command:
+To use the profile, store the profile name into `AWS_PROFILE` environment variable:
 
 ```bash
 export AWS_PROFILE=your-profile
 ```
+, where `your-profile` is your aws profile in your `~/.aws/credentials` file as described in the previous documentation.
 
 Also specify the AWS region to use (eu-west-1 is Ireland):
 
