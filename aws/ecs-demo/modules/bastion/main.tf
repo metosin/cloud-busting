@@ -74,6 +74,10 @@ resource "aws_iam_instance_profile" "ec2-iam-profile" {
   role = aws_iam_role.ec2-role.name
 }
 
+resource "aws_iam_role_policy_attachment" "ssm-policy-attachment" {
+  role       = aws_iam_role.ec2-role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
 resource "aws_security_group" "bastion-subnet-sg" {
   name   = "${var.prefix}${local.workspace_name}-bastion-subnet-sg"
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
