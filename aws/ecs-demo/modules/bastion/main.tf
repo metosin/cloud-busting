@@ -10,6 +10,10 @@ locals {
   }
 }
 
+#
+# SSH key generation
+#
+
 # We'll generate a SSH keypair with the tls_private_key resource
 resource "tls_private_key" "ec2-ssh-key" {
   algorithm = "RSA"
@@ -44,7 +48,11 @@ resource "aws_key_pair" "ec2-key-pair" {
   })
 }
 
-# We create a IAM role for the instance, for later use (for example SSM agent)
+#
+# IAM (Identity Access Management)
+#
+
+# Adding a role for the EC2 machine allows making AWS service APIs available via IAM policies
 resource "aws_iam_role" "ec2-role" {
   name               = "${var.prefix}${local.workspace_name}-ec2-iam-role"
   path               = "/"
@@ -78,6 +86,11 @@ resource "aws_iam_role_policy_attachment" "ssm-policy-attachment" {
   role       = aws_iam_role.ec2-role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
+
+#
+# Security groups
+#
+
 resource "aws_security_group" "bastion-subnet-sg" {
   name   = "${var.prefix}${local.workspace_name}-bastion-subnet-sg"
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
@@ -117,6 +130,10 @@ resource "aws_security_group_rule" "from-bastion-to-database-ingress-rule" {
   type                     = "ingress"
 }
 
+#
+# The Bastion EC2 instance itself
+#
+
 resource "aws_instance" "bastion-ec2-instance" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
@@ -132,7 +149,7 @@ resource "aws_instance" "bastion-ec2-instance" {
   })
 }
 
-# NOTE: There is a limit of 5 EIPs per AWS account per region.
+# Public IP address for the instance
 resource "aws_eip" "ec2_eip" {
   instance = aws_instance.bastion-ec2-instance.id
   vpc      = true
