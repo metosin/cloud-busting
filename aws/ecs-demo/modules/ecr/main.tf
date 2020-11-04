@@ -1,6 +1,6 @@
 locals {
   workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
-  module_name      = "bastion"
+  module_name      = "ecr"
   res_prefix    = "${var.prefix}${local.workspace_name}"
   default_tags     = {
     Resprefix = local.res_prefix

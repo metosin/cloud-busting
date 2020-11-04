@@ -14,3 +14,8 @@ output "private_subnet_ids" {
   value = aws_subnet.private.*.id
 }
 
+output "module_name" {
+  value = local.module_name
+}
+
+

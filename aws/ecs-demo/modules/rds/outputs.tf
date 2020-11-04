@@ -23,3 +23,7 @@ output "master_password_ssm_parameter_name" {
 output "rds_security_group_id" {
   value = aws_security_group.database.id
 }
+
+output "module_name" {
+  value = local.module_name
+}
