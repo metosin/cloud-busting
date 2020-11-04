@@ -1,6 +1,12 @@
 locals {
   workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   module_name    = "network"
+  default_tags     = {
+    Prefix    = var.prefix
+    Workspace = terraform.workspace
+    Module    = local.module_name
+    Terraform = "true"
+  }
 }
 
 data "aws_availability_zones" "main" {
@@ -10,12 +16,9 @@ data "aws_availability_zones" "main" {
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
 
-  tags = {
-    Name      = "${var.prefix}${local.workspace_name}-vpc"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-    Module    = local.module_name
-  }
+  tags = merge(local.default_tags, {
+    Name = "${var.prefix}${local.workspace_name}-vpc"
+  })
 }
 
 resource "aws_subnet" "public" {
@@ -25,14 +28,10 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
   vpc_id                  = aws_vpc.main.id
 
-  tags = {
+  tags = merge(local.default_tags, {
     Name       = "${var.prefix}${local.workspace_name}-public-subnet-${count.index}"
-    Prefix     = var.prefix
-    Workspace  = terraform.workspace
-    Module     = local.module_name
     SubnetType = "public"
-    Terraform = "true"
-  }
+  })
 
   lifecycle {
     create_before_destroy = true
@@ -46,31 +45,22 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch = false
   vpc_id                  = aws_vpc.main.id
 
-  tags = {
+  tags = merge(local.default_tags, {
     Name       = "${var.prefix}${local.workspace_name}-private-subnet-${count.index}"
-    Prefix     = var.prefix
-    Workspace  = terraform.workspace
-    Module     = local.module_name
     SubnetType = "private"
-    Terraform = "true"
-  }
+  })
 
   lifecycle {
     create_before_destroy = true
   }
 }
 
-
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
+  tags = merge(local.default_tags, {
     Name      = "${var.prefix}${local.workspace_name}-igw"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-    Module    = local.module_name
-    Terraform = "true"
-  }
+  })
 
   lifecycle {
     create_before_destroy = true
@@ -80,13 +70,9 @@ resource "aws_internet_gateway" "main" {
 resource "aws_eip" "nat" {
   vpc = true
 
-  tags = {
+  tags = merge(local.default_tags, {
     Name      = "${var.prefix}${local.workspace_name}-nat-eip"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-    Module    = local.module_name
-    Terraform = "true"
-  }
+  })
 
   lifecycle {
     create_before_destroy = true
@@ -97,13 +83,9 @@ resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public[0].id
 
-  tags = {
+  tags = merge(local.default_tags, {
     Name      = "${var.prefix}${local.workspace_name}-nat-gw"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-    Module    = local.module_name
-    Terraform = "true"
-  }
+  })
 
   lifecycle {
     create_before_destroy = true
@@ -113,14 +95,10 @@ resource "aws_nat_gateway" "nat" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
+  tags = merge(local.default_tags, {
     Name       = "${var.prefix}${local.workspace_name}-public-route-table"
-    Prefix     = var.prefix
-    Workspace  = terraform.workspace
-    Module     = local.module_name
     SubnetType = "public"
-    Terraform = "true"
-  }
+  })
 
   lifecycle {
     create_before_destroy = true
@@ -150,14 +128,10 @@ resource "aws_route_table_association" "public" {
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
+  tags = merge(local.default_tags, {
     Name       = "${var.prefix}${local.workspace_name}-private-route-table"
-    Prefix     = var.prefix
-    Workspace  = terraform.workspace
-    Module     = local.module_name
     SubnetType = "private"
-    Terraform = "true"
-  }
+  })
 
   lifecycle {
     create_before_destroy = true
