@@ -1,6 +1,6 @@
 # The application will be reachable from public internet via a publi Application Load Balancer
 resource "aws_lb" "backend" {
-  name     = "${local.prefix_name}-backend"
+  name     = "${local.res_prefix}-backend"
   internal = false
   # We use Application Load Balancer: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html
   load_balancer_type = "application"
@@ -22,12 +22,16 @@ resource "aws_lb" "backend" {
 
 # Access logs will be stored into a S3 bucket
 resource "aws_s3_bucket" "lb-logs" {
-  bucket = "${local.prefix_name}-access-logs"
+  bucket = "${local.res_prefix}-access-logs"
   acl    = "private"
 
   # Destroy the bucket and all files when removing the bucket
   # For production, one might want to disable this
   force_destroy = true
+
+  tags = merge(local.default_tags, {
+    Name = "${local.res_prefix}-access-logs"
+  })
 }
 
 # Objects in this bucket will be private
@@ -100,7 +104,7 @@ resource "aws_s3_bucket_policy" "lb-logs" {
 
 # Targets to the load balancer are registered by IP address, into the following target group
 resource "aws_lb_target_group" "backend" {
-  name                 = "${local.prefix_name}-backend"
+  name                 = "${local.res_prefix}-backend"
   port                 = var.backend_port
   protocol             = "HTTP"
   deregistration_delay = 30
@@ -122,6 +126,11 @@ resource "aws_lb_target_group" "backend" {
   depends_on = [
     aws_lb.backend
   ]
+
+  tags = merge(local.default_tags, {
+    Name = "${local.res_prefix}-lb-target-group"
+  })
+
 }
 
 # The default route will point all traffic to the target group
@@ -134,5 +143,4 @@ resource "aws_lb_listener" "http" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.backend.arn
   }
-
 }

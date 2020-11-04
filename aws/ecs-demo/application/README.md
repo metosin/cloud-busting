@@ -16,7 +16,13 @@ terraform apply
 
 Then, [install](https://github.com/awslabs/amazon-ecr-credential-helper#installing) and [configure](https://github.com/awslabs/amazon-ecr-credential-helper#configuration) the [ECR credential helper](https://github.com/awslabs/amazon-ecr-credential-helper) to authenticate to the ECR repository for pushing the image:
 
-For example, add:
+First query your account id:
+
+```bash
+aws sts get-caller-identity
+```
+
+Then add to file `~/.docker/config.json` :
 
 ```json
 {
@@ -24,12 +30,6 @@ For example, add:
 		"<your aws_account_id>.dkr.ecr.region.amazonaws.com": "ecr-login"
 	}
 }
-```
-
-to
-
-```
-~/.docker/config.json
 ```
 
 After this, build the application:

@@ -10,7 +10,7 @@ Create the service by first initializing the module:
 source ../../../tools/terraform-init
 ```
 
-Running apply will as for a Git hash of the Docker image to run. This is the tag the [application image](../../application) was tagged with.
+Running apply will ask for a Git hash of the Docker image to run. This is the tag the [application image](../../application) was tagged with.
 
 ```bash
 terraform apply

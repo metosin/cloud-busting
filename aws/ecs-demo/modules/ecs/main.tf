@@ -3,6 +3,7 @@ locals {
   module_name      = "ecs"
   res_prefix    = "${var.prefix}${local.workspace_name}"
   default_tags     = {
+    Resprefix = local.res_prefix
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
@@ -19,11 +20,9 @@ resource "aws_ecs_cluster" "backend" {
     value = "enabled"
   }
 
-  tags = {
+  tags = merge(local.default_tags, {
     Name      = "${local.res_prefix}-backend"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-  }
+  })
 }
 
 # Service will keep a desired amount of docker containers always running
@@ -50,6 +49,10 @@ resource "aws_ecs_service" "backend" {
     # Ditto for security groups
     security_groups = [aws_security_group.backend.id]
   }
+
+  tags = merge(local.default_tags, {
+    Name      = "${local.res_prefix}-ecs-service"
+  })
 }
 
 # This is used to read the current region name
@@ -129,12 +132,20 @@ resource "aws_ecs_task_definition" "backend" {
         ]
       }
   ])
+
+  tags = merge(local.default_tags, {
+    Name      = "${local.res_prefix}-ecs-task-definition"
+  })
 }
 
 # Well create a log group and specify how long to retain logs
 resource "aws_cloudwatch_log_group" "backend" {
   name              = "${local.res_prefix}-backend"
   retention_in_days = 365
+
+  tags = merge(local.default_tags, {
+    Name      = "${local.res_prefix}-ecs-log-group"
+  })
 }
 
 # This IAM role will be used by the docker daemon
@@ -152,6 +163,10 @@ resource "aws_iam_role" "backend-task-execution" {
           Action = "sts:AssumeRole"
         }
       ]
+  })
+
+  tags = merge(local.default_tags, {
+    Name      = "${local.res_prefix}-backend-task-execution"
   })
 }
 
