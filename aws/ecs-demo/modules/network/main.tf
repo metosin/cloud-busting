@@ -1,7 +1,9 @@
 locals {
   workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   module_name    = "network"
+  res_prefix    = "${var.prefix}${local.workspace_name}"
   default_tags     = {
+    Resprefix = local.res_prefix
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
@@ -17,7 +19,7 @@ resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
 
   tags = merge(local.default_tags, {
-    Name = "${var.prefix}${local.workspace_name}-vpc"
+    Name = "${local.res_prefix}-vpc"
   })
 }
 
@@ -29,7 +31,7 @@ resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
 
   tags = merge(local.default_tags, {
-    Name       = "${var.prefix}${local.workspace_name}-public-subnet-${count.index}"
+    Name       = "${local.res_prefix}-public-subnet-${count.index}"
     SubnetType = "public"
   })
 
@@ -46,7 +48,7 @@ resource "aws_subnet" "private" {
   vpc_id                  = aws_vpc.main.id
 
   tags = merge(local.default_tags, {
-    Name       = "${var.prefix}${local.workspace_name}-private-subnet-${count.index}"
+    Name       = "${local.res_prefix}-private-subnet-${count.index}"
     SubnetType = "private"
   })
 
@@ -59,7 +61,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = merge(local.default_tags, {
-    Name      = "${var.prefix}${local.workspace_name}-igw"
+    Name      = "${local.res_prefix}-igw"
   })
 
   lifecycle {
@@ -71,7 +73,7 @@ resource "aws_eip" "nat" {
   vpc = true
 
   tags = merge(local.default_tags, {
-    Name      = "${var.prefix}${local.workspace_name}-nat-eip"
+    Name      = "${local.res_prefix}-nat-eip"
   })
 
   lifecycle {
@@ -84,7 +86,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = aws_subnet.public[0].id
 
   tags = merge(local.default_tags, {
-    Name      = "${var.prefix}${local.workspace_name}-nat-gw"
+    Name      = "${local.res_prefix}-nat-gw"
   })
 
   lifecycle {
@@ -96,7 +98,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
   tags = merge(local.default_tags, {
-    Name       = "${var.prefix}${local.workspace_name}-public-route-table"
+    Name       = "${local.res_prefix}-public-route-table"
     SubnetType = "public"
   })
 
@@ -129,7 +131,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   tags = merge(local.default_tags, {
-    Name       = "${var.prefix}${local.workspace_name}-private-route-table"
+    Name       = "${local.res_prefix}-private-route-table"
     SubnetType = "private"
   })
 

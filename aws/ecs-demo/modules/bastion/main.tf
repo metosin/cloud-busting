@@ -1,8 +1,10 @@
 locals {
   workspace_name   = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   module_name      = "bastion"
+  res_prefix    = "${var.prefix}${local.workspace_name}"
   private_key_name = "ec2_id_rsa"
   default_tags     = {
+    Resprefix = local.res_prefix
     Prefix    = var.prefix
     Workspace = terraform.workspace
     Module    = local.module_name
@@ -44,7 +46,7 @@ resource "aws_key_pair" "ec2-key-pair" {
   public_key = tls_private_key.ec2-ssh-key.public_key_openssh
 
   tags = merge(local.default_tags, {
-    Name = "${var.prefix}${local.workspace_name}-ec2-key-pair"
+    Name = "${local.res_prefix}-ec2-key-pair"
   })
 }
 
@@ -54,7 +56,7 @@ resource "aws_key_pair" "ec2-key-pair" {
 
 # Adding a role for the EC2 machine allows making AWS service APIs available via IAM policies
 resource "aws_iam_role" "ec2-role" {
-  name               = "${var.prefix}${local.workspace_name}-ec2-iam-role"
+  name               = "${local.res_prefix}-ec2-iam-role"
   path               = "/"
   assume_role_policy = <<EOF
 {
@@ -73,12 +75,12 @@ resource "aws_iam_role" "ec2-role" {
 EOF
 
   tags = merge(local.default_tags, {
-    Name = "${var.prefix}${local.workspace_name}-ec2-iam-role"
+    Name = "${local.res_prefix}-ec2-iam-role"
   })
 }
 
 resource "aws_iam_instance_profile" "ec2-iam-profile" {
-  name = "${var.prefix}${local.workspace_name}-ec2-iam-profile"
+  name = "${local.res_prefix}-ec2-iam-profile"
   role = aws_iam_role.ec2-role.name
 }
 
@@ -92,11 +94,11 @@ resource "aws_iam_role_policy_attachment" "ssm-policy-attachment" {
 #
 
 resource "aws_security_group" "bastion-subnet-sg" {
-  name   = "${var.prefix}${local.workspace_name}-bastion-subnet-sg"
+  name   = "${local.res_prefix}-bastion-subnet-sg"
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
 
   tags = merge(local.default_tags, {
-    Name = "${var.prefix}${local.workspace_name}-bastion-subnet-sg"
+    Name = "${local.res_prefix}-bastion-subnet-sg"
   })
 }
 
@@ -145,7 +147,7 @@ resource "aws_instance" "bastion-ec2-instance" {
   tenancy                = var.tenancy_type
 
   tags = merge(local.default_tags, {
-    Name = "${var.prefix}${local.workspace_name}-bastion"
+    Name = "${local.res_prefix}-bastion"
   })
 }
 
@@ -155,6 +157,6 @@ resource "aws_eip" "ec2_eip" {
   vpc      = true
 
   tags = merge(local.default_tags, {
-    Name = "${var.prefix}${local.workspace_name}-ec2-eip"
+    Name = "${local.res_prefix}-ec2-eip"
   })
 }

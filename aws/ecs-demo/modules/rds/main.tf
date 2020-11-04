@@ -1,6 +1,14 @@
 locals {
   workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   module_name    = "rds"
+  res_prefix    = "${var.prefix}${local.workspace_name}"
+  default_tags     = {
+    Resprefix = local.res_prefix
+    Prefix    = var.prefix
+    Workspace = terraform.workspace
+    Module    = local.module_name
+    Terraform = "true"
+  }
 }
 
 data "aws_vpc" "main" {
@@ -9,7 +17,7 @@ data "aws_vpc" "main" {
 }
 
 resource "aws_security_group" "database" {
-  name        = "${var.prefix}${local.workspace_name}-database-sg"
+  name        = "${local.res_prefix}-database-sg"
   description = "Database security group"
   vpc_id      = data.aws_vpc.main.id
 
@@ -32,46 +40,36 @@ resource "aws_security_group" "database" {
       "0.0.0.0/0"]
   }
 
-  tags = {
-    Name      = "${var.prefix}${local.workspace_name}-database-sg"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-    Module    = local.module_name
-    Terraform = "true"
-  }
+  tags = merge(local.default_tags, {
+    Name      = "${local.res_prefix}-database-sg"
+  })
 }
 
 resource "aws_db_subnet_group" "database" {
-  name        = "${var.prefix}${local.workspace_name}-db-subnet-group"
+  name        = "${local.res_prefix}-db-subnet-group"
   description = "Database subnet group"
   subnet_ids  = data.terraform_remote_state.network.outputs.private_subnet_ids
-  tags        = {
-    Name      = "${var.prefix}${local.workspace_name}-db-subnet-group"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-    Module    = local.module_name
-    Terraform = "true"
-  }
+
+  tags = merge(local.default_tags, {
+    Name      = "${local.res_prefix}-db-subnet-group"
+  })
 }
 
 resource "aws_kms_key" "rds_key" {
   description = "Key for encrypting RDS"
-  tags        = {
-    Name      = "${var.prefix}${local.workspace_name}-rds-key"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-    Module    = local.module_name
-    Terraform = "true"
-  }
+
+  tags = merge(local.default_tags, {
+    Name      = "${local.res_prefix}-rds-key"
+  })
 }
 
 resource "aws_kms_alias" "rds_kms_alias" {
-  name          = "alias/${var.prefix}${local.workspace_name}-rds-kms-alias"
+  name          = "alias/${local.res_prefix}-rds-kms-alias"
   target_key_id = aws_kms_key.rds_key.key_id
 }
 
 resource "aws_db_parameter_group" "database" {
-  name   = "${var.prefix}${local.workspace_name}-db-parameter-group"
+  name   = "${local.res_prefix}-db-parameter-group"
   family = "postgres12"
 
   dynamic "parameter" {
@@ -82,13 +80,10 @@ resource "aws_db_parameter_group" "database" {
       apply_method = parameter.value.apply_method
     }
   }
-  tags = {
-    Name      = "${var.prefix}${local.workspace_name}-db-parameter-group"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-    Module    = local.module_name
-    Terraform = "true"
-  }
+
+  tags = merge(local.default_tags, {
+    Name      = "${local.res_prefix}-db-parameter-group"
+  })
 }
 
 data "sops_file" "secrets" {
@@ -96,7 +91,7 @@ data "sops_file" "secrets" {
 }
 
 resource "aws_db_instance" "database" {
-  identifier                          = "${var.prefix}${local.workspace_name}-database"
+  identifier                          = "${local.res_prefix}-database"
   allocated_storage                   = var.allocated_storage
   max_allocated_storage               = var.max_allocated_storage
   storage_type                        = "gp2"
@@ -128,13 +123,9 @@ resource "aws_db_instance" "database" {
   enabled_cloudwatch_logs_exports     = [
     "postgresql"]
 
-  tags = {
-    Name      = "${var.prefix}${local.workspace_name}-database"
-    Prefix    = var.prefix
-    Workspace = terraform.workspace
-    Module    = local.module_name
-    Terraform = "true"
-  }
+  tags = merge(local.default_tags, {
+    Name      = "${local.res_prefix}-database"
+  })
 }
 
 resource "aws_ssm_parameter" "rds_master_password" {
