@@ -2,7 +2,7 @@ locals {
   workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   module_name    = "resource-groups"
   res_prefix     = "${var.prefix}${local.workspace_name}"
-  default_tags   = {
+  default_tags = {
     Resprefix = local.res_prefix
     Prefix    = var.prefix
     Workspace = terraform.workspace

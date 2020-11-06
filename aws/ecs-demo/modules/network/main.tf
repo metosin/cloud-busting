@@ -1,8 +1,8 @@
 locals {
   workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   module_name    = "network"
-  res_prefix    = "${var.prefix}${local.workspace_name}"
-  default_tags     = {
+  res_prefix     = "${var.prefix}${local.workspace_name}"
+  default_tags = {
     Resprefix = local.res_prefix
     Prefix    = var.prefix
     Workspace = terraform.workspace
@@ -61,7 +61,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-igw"
+    Name = "${local.res_prefix}-igw"
   })
 
   lifecycle {
@@ -73,7 +73,7 @@ resource "aws_eip" "nat" {
   vpc = true
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-nat-eip"
+    Name = "${local.res_prefix}-nat-eip"
   })
 
   lifecycle {
@@ -86,7 +86,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = aws_subnet.public[0].id
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-nat-gw"
+    Name = "${local.res_prefix}-nat-gw"
   })
 
   lifecycle {

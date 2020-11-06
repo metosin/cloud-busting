@@ -58,12 +58,12 @@ variable "skip_final_snapshot" {
 
 variable parameter_group_parameters {
   description = "Database parameter group values"
-  type        = list(object({
+  type = list(object({
     name         = string
     value        = number
     apply_method = string
   }))
-  default     = [
+  default = [
     {
       name         = "auto_explain.log_min_duration"
       value        = 500

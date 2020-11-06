@@ -1,8 +1,8 @@
 locals {
   workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
-  module_name      = "ecs"
-  res_prefix    = "${var.prefix}${local.workspace_name}"
-  default_tags     = {
+  module_name    = "ecs"
+  res_prefix     = "${var.prefix}${local.workspace_name}"
+  default_tags = {
     Resprefix = local.res_prefix
     Prefix    = var.prefix
     Workspace = terraform.workspace
@@ -21,7 +21,7 @@ resource "aws_ecs_cluster" "backend" {
   }
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-backend"
+    Name = "${local.res_prefix}-backend"
   })
 }
 
@@ -51,7 +51,7 @@ resource "aws_ecs_service" "backend" {
   }
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-ecs-service"
+    Name = "${local.res_prefix}-ecs-service"
   })
 }
 
@@ -67,8 +67,8 @@ resource "aws_ecs_task_definition" "backend" {
   execution_role_arn = aws_iam_role.backend-task-execution.arn
   # If the containers in the task definition need to access AWS services, we'd specify a role via task_role_arn.
   # task_role_arn = ...
-  cpu                = var.backend_cpu
-  memory             = var.backend_memory
+  cpu    = var.backend_cpu
+  memory = var.backend_memory
   container_definitions = jsonencode(
     [
       {
@@ -107,15 +107,15 @@ resource "aws_ecs_task_definition" "backend" {
             value = var.image_tag
           },
           {
-            name = "DB_HOST"
+            name  = "DB_HOST"
             value = data.terraform_remote_state.rds.outputs.rds_address
           },
           {
-            name = "DB_PORT"
+            name  = "DB_PORT"
             value = tostring(data.terraform_remote_state.rds.outputs.rds_port)
           },
           {
-            name = "DB_NAME"
+            name  = "DB_NAME"
             value = data.terraform_remote_state.rds.outputs.database_name
           },
           {
@@ -126,7 +126,7 @@ resource "aws_ecs_task_definition" "backend" {
         ]
         secrets = [
           {
-            name = "DB_PASSWORD"
+            name      = "DB_PASSWORD"
             valueFrom = data.terraform_remote_state.rds.outputs.master_password_ssm_parameter_name
           }
         ]
@@ -134,7 +134,7 @@ resource "aws_ecs_task_definition" "backend" {
   ])
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-ecs-task-definition"
+    Name = "${local.res_prefix}-ecs-task-definition"
   })
 }
 
@@ -144,7 +144,7 @@ resource "aws_cloudwatch_log_group" "backend" {
   retention_in_days = 365
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-ecs-log-group"
+    Name = "${local.res_prefix}-ecs-log-group"
   })
 }
 
@@ -166,7 +166,7 @@ resource "aws_iam_role" "backend-task-execution" {
   })
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-backend-task-execution"
+    Name = "${local.res_prefix}-backend-task-execution"
   })
 }
 

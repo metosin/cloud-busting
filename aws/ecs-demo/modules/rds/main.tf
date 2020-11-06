@@ -1,8 +1,8 @@
 locals {
   workspace_name = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   module_name    = "rds"
-  res_prefix    = "${var.prefix}${local.workspace_name}"
-  default_tags     = {
+  res_prefix     = "${var.prefix}${local.workspace_name}"
+  default_tags = {
     Resprefix = local.res_prefix
     Prefix    = var.prefix
     Workspace = terraform.workspace
@@ -28,7 +28,7 @@ resource "aws_security_group" "database" {
     to_port     = var.rds_port
     protocol    = "tcp"
     cidr_blocks = [
-      data.aws_vpc.main.cidr_block]
+    data.aws_vpc.main.cidr_block]
   }
 
   egress {
@@ -37,11 +37,11 @@ resource "aws_security_group" "database" {
     to_port     = 0
     protocol    = "tcp"
     cidr_blocks = [
-      "0.0.0.0/0"]
+    "0.0.0.0/0"]
   }
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-database-sg"
+    Name = "${local.res_prefix}-database-sg"
   })
 }
 
@@ -51,7 +51,7 @@ resource "aws_db_subnet_group" "database" {
   subnet_ids  = data.terraform_remote_state.network.outputs.private_subnet_ids
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-db-subnet-group"
+    Name = "${local.res_prefix}-db-subnet-group"
   })
 }
 
@@ -59,7 +59,7 @@ resource "aws_kms_key" "rds_key" {
   description = "Key for encrypting RDS"
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-rds-key"
+    Name = "${local.res_prefix}-rds-key"
   })
 }
 
@@ -82,7 +82,7 @@ resource "aws_db_parameter_group" "database" {
   }
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-db-parameter-group"
+    Name = "${local.res_prefix}-db-parameter-group"
   })
 }
 
@@ -91,23 +91,23 @@ data "sops_file" "secrets" {
 }
 
 resource "aws_db_instance" "database" {
-  identifier                          = "${local.res_prefix}-database"
-  allocated_storage                   = var.allocated_storage
-  max_allocated_storage               = var.max_allocated_storage
-  storage_type                        = "gp2"
-  skip_final_snapshot                 = var.skip_final_snapshot
-  engine                              = "postgres"
-  engine_version                      = "12.4"
-  instance_class                      = var.instance_class
-  name                                = "ecsdemo"
-  username                            = "ecsdemo"
-  password                            = data.sops_file.secrets.data["rds_master_password"]
-  port                                = var.rds_port
-  maintenance_window                  = var.maintenance_window
-  backup_window                       = var.backup_window
-  backup_retention_period             = var.backup_retention_period
-  vpc_security_group_ids              = [
-    aws_security_group.database.id]
+  identifier              = "${local.res_prefix}-database"
+  allocated_storage       = var.allocated_storage
+  max_allocated_storage   = var.max_allocated_storage
+  storage_type            = "gp2"
+  skip_final_snapshot     = var.skip_final_snapshot
+  engine                  = "postgres"
+  engine_version          = "12.4"
+  instance_class          = var.instance_class
+  name                    = "ecsdemo"
+  username                = "ecsdemo"
+  password                = data.sops_file.secrets.data["rds_master_password"]
+  port                    = var.rds_port
+  maintenance_window      = var.maintenance_window
+  backup_window           = var.backup_window
+  backup_retention_period = var.backup_retention_period
+  vpc_security_group_ids = [
+  aws_security_group.database.id]
   db_subnet_group_name                = aws_db_subnet_group.database.name
   iam_database_authentication_enabled = true
   storage_encrypted                   = true
@@ -119,17 +119,17 @@ resource "aws_db_instance" "database" {
   # Monitoring requires a MonitoringRoleARN
   # monitoring_role_arn                 = "TODO"
   # monitoring_interval                 = 60
-  parameter_group_name                = aws_db_parameter_group.database.id
-  enabled_cloudwatch_logs_exports     = [
-    "postgresql"]
+  parameter_group_name = aws_db_parameter_group.database.id
+  enabled_cloudwatch_logs_exports = [
+  "postgresql"]
 
   tags = merge(local.default_tags, {
-    Name      = "${local.res_prefix}-database"
+    Name = "${local.res_prefix}-database"
   })
 }
 
 resource "aws_ssm_parameter" "rds_master_password" {
-  name = "/${local.res_prefix}/rds/master_password"
-  type = "SecureString"
+  name  = "/${local.res_prefix}/rds/master_password"
+  type  = "SecureString"
   value = data.sops_file.secrets.data["rds_master_password"]
 }

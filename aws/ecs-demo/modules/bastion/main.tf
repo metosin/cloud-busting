@@ -1,9 +1,9 @@
 locals {
   workspace_name   = terraform.workspace == "default" ? "" : "-${terraform.workspace}"
   module_name      = "bastion"
-  res_prefix    = "${var.prefix}${local.workspace_name}"
+  res_prefix       = "${var.prefix}${local.workspace_name}"
   private_key_name = "ec2_id_rsa"
-  default_tags     = {
+  default_tags = {
     Resprefix = local.res_prefix
     Prefix    = var.prefix
     Workspace = terraform.workspace
@@ -115,7 +115,7 @@ resource "aws_security_group_rule" "bastion-developer-workstation-ingress-rule" 
 resource "aws_security_group_rule" "from-bastion-to-world-egress-rule" {
   description       = "Allow bastion to access world (e.g. for installing postgresql client etc)"
   security_group_id = aws_security_group.bastion-subnet-sg.id
-  cidr_blocks     = ["0.0.0.0/0"]
+  cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 0
   protocol          = -1
   to_port           = 0
@@ -137,14 +137,14 @@ resource "aws_security_group_rule" "from-bastion-to-database-ingress-rule" {
 #
 
 resource "aws_instance" "bastion-ec2-instance" {
-  ami                    = var.ami_id
-  instance_type          = var.instance_type
-  subnet_id              = data.terraform_remote_state.network.outputs.public_subnet_ids[0]
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  subnet_id     = data.terraform_remote_state.network.outputs.public_subnet_ids[0]
   vpc_security_group_ids = [
-    aws_security_group.bastion-subnet-sg.id]
-  iam_instance_profile   = aws_iam_instance_profile.ec2-iam-profile.name
-  key_name               = aws_key_pair.ec2-key-pair.key_name
-  tenancy                = var.tenancy_type
+  aws_security_group.bastion-subnet-sg.id]
+  iam_instance_profile = aws_iam_instance_profile.ec2-iam-profile.name
+  key_name             = aws_key_pair.ec2-key-pair.key_name
+  tenancy              = var.tenancy_type
 
   tags = merge(local.default_tags, {
     Name = "${local.res_prefix}-bastion"

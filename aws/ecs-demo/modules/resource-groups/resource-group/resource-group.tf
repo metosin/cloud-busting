@@ -1,5 +1,5 @@
 locals {
-  rg_name        = "${var.rg_name}-rg"
+  rg_name = "${var.rg_name}-rg"
 }
 
 resource "aws_resourcegroups_group" "rg" {
