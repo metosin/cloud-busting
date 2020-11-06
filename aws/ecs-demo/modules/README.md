@@ -15,6 +15,8 @@ This example consists of the following modules:
 * resource-groups
   * A module that defines resource groups for making it easier to find the resources from the AWS console
 
+## Apply
+
 Your next step is to open a terminal and `cd` into each of these directories and give the following commands (just as you did previously with the backend):
 
 * `source ../../../tools/terraform-init`
@@ -37,3 +39,7 @@ resource-groups
 Here's also picture of the module dependency graph:
 
 ![dependencies](./dependencies.png)
+
+# Destroy
+
+For demo purposes, the `destroy-all.sh` script can be used to destroy all modules in one go, since it's a bit tedious to try remember to run destroy command in dependency order manually.
