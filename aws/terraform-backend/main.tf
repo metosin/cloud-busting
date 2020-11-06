@@ -12,6 +12,14 @@ resource "aws_s3_bucket" "terraform" {
     Prefix    = var.prefix
     Terraform = "true"
   }
+
+  # In order to destroy the bucket, remove all objects too
+  force_destroy = true
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "python destroy-all-object-versions.py ${self.id}"
+  }
 }
 
 # State file will be encrypted with this key
