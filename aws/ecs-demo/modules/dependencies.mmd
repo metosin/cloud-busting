@@ -1,0 +1,12 @@
+graph TD
+  resource-groups --> bastion
+  resource-groups --> ecr
+  resource-groups --> ecs
+  resource-groups --> network
+  resource-groups --> rds
+  ecs             --> network
+  ecs             --> rds
+  ecs             --> ecr
+  bastion         --> network
+  bastion         --> rds
+  rds             --> network
