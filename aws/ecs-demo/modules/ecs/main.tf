@@ -31,7 +31,7 @@ resource "aws_ecs_service" "backend" {
   name            = "${local.res_prefix}-backend"
   cluster         = aws_ecs_cluster.backend.id
   task_definition = aws_ecs_task_definition.backend.arn
-  desired_count   = 2
+  desired_count   = var.desired_count
 
   # We run containers with the Fargate launch type. The other alternative is EC2, in which case we'd provision EC2
   # instances and attach them to the cluster.

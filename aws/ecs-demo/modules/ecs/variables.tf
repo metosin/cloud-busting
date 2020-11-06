@@ -38,4 +38,17 @@ variable "backend_memory" {
 
 variable "image_tag" {
   description = "Docker image tag to run by the service. Usually a Git SHA"
+  type        = string
+}
+
+variable "desired_count" {
+  description = "Amount of tasks to run in the backend service"
+  type        = number
+  default     = 2
+}
+
+variable "monitoring_emails" {
+  description = "List of emails where monitoring alarms are sent to"
+  type        = list
+  default     = []
 }
