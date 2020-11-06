@@ -1,6 +1,6 @@
-resource "aws_cloudwatch_metric_alarm" "healthy-host-count" {
-  alarm_name          = "${local.res_prefix} backend healthy host count"
-  alarm_description   = "${local.res_prefix} Healthy host count"
+resource "aws_cloudwatch_metric_alarm" "unhealthy-host-count" {
+  alarm_name          = "${local.res_prefix} backend unhealthy host count"
+  alarm_description   = "${local.res_prefix} Unhealthy host count"
   comparison_operator = "GreaterThanThreshold"
 
   threshold = 0
