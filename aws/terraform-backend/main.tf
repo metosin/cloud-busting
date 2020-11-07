@@ -16,6 +16,7 @@ resource "aws_s3_bucket" "terraform" {
   # In order to destroy the bucket, remove all objects too
   force_destroy = true
 
+  # Since versioning is enabled, destroy all versions too
   provisioner "local-exec" {
     when    = destroy
     command = "python destroy-all-object-versions.py ${self.id}"
