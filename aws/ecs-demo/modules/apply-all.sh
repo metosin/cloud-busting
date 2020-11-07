@@ -6,6 +6,7 @@ apply_module() {
     local MODULE=$1
     echo "Applying $MODULE"
     pushd $MODULE > /dev/null
+    source ../../../tools/terraform-init
     terraform apply -auto-approve
     popd > /dev/null
 }
