@@ -19,11 +19,28 @@ First, install `tfswitch` via [instructions](https://tfswitch.warrensbox.com/Ins
 
     brew install warrensbox/tap/tfswitch
 
-Then issuing
+Then run `tfswith` to select a Terraform version:
 
-    tfswitch
+```bash
+tfswitch
+Use the arrow keys to navigate: ↓ ↑ → ←
+? Select Terraform version:
+  ▸ 0.13.5 *recent
+    0.13.4
+    0.13.3
+    0.13.2
+↓   0.13.1
+```
 
-Provides a menu to select Terraform version.
+For Linux users, specify a binary that under the `$HOME` directory (in OSX, writing to `/usr/local/bin` is usually allowed):
+
+```bash
+mkdir $HOME/bin
+export PATH=$PATH:$HOME/bin
+tfswitch -b $HOME/bin/terraform
+```
+
+Tfswitch keeps the Terraform binaries store under `$HOME/.terraform.versions`, which helps switching version especially when managing multiple Terraform projetcs.
 
 Tfswitch has the advantage of being able to [specify the required Terraform
 version](https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version) in a [configurafion](https://tfswitch.warrensbox.com/Quick-Start/#use-versiontf-file) file, which helps to make sure everyone in your team is using the same version of Terraform:
