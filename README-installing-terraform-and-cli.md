@@ -5,7 +5,7 @@ There are few ways of installing Terrafrom:
 ## Manual installation from archive
 
 1. Download Terraform from [download site](https://www.terraform.io/downloads.html).
-2. Unzip the archive and put it into `PATH`
+2. Unzip the archive and put it into `$PATH`
 
 ## Using Homebrew
 
