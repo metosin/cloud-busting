@@ -39,4 +39,4 @@ version](https://www.terraform.io/docs/configuration/terraform.html#specifying-a
 
 # Installing AWS CLI
 
-Follow [AWS CLI instructions](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html).
+Follow [AWS CLI instructions](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
