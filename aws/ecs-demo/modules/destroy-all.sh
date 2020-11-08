@@ -6,6 +6,7 @@ destroy_module() {
     local MODULE=$1
     echo "Destroying $MODULE"
     pushd $MODULE > /dev/null
+    source ../../../tools/terraform-init
     terraform destroy -auto-approve
     popd > /dev/null
 }
