@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eu -o pipefail
+
 # Helper script for applying all modules in dependency order and building the application
 
 apply_module() {

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eu -o pipefail
+
 # Helper script for destroying all modules in dependency order
 
 destroy_module() {
