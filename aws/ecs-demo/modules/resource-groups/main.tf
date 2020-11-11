@@ -67,3 +67,9 @@ module "rg_module_rds" {
   tag_value = data.terraform_remote_state.rds.outputs.module_name
 }
 
+module "rg_module_common" {
+  source    = "./resource-group"
+  rg_name   = "${local.res_prefix}-common"
+  tag_key   = "Module"
+  tag_value = data.terraform_remote_state.common.outputs.module_name
+}

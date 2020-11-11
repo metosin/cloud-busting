@@ -47,8 +47,3 @@ variable "desired_count" {
   default     = 2
 }
 
-variable "monitoring_emails" {
-  description = "List of emails where monitoring alarms are sent to"
-  type        = list
-  default     = []
-}
