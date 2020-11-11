@@ -58,7 +58,7 @@ export TF_VAR_prefix=<YOUR-VALUE-HERE>
 ```
 4. Run the `apply-all.sh` script
 ```bash
-./apply-all.sh`
+./apply-all.sh
 ```
 
 Sit back and watch the fireworks 🎆 :) 
