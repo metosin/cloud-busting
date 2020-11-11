@@ -1,8 +1,12 @@
 # ecs-demo
 
-A web application that is deployed to AWS via Terraform and is run in Elastic Container Service (ECS) using Fargate
-runtime, reads data from a RDS/PostgreSQL data store and is accessible from public internet via a Application Load
-Balancer (ALB).
+This directory contains a demonstration of a Virtual Private Cloud (VPC) created for running applications. For simplicity, only a single web applicationis run, packaged into Docker image and run via the Elatics Container Service (ECS) using the Fargate launch type. Fargate is used to remove the need to provision virtual machines for running Docker containers.
+
+The Fargate runtime is connected to a private subnet (which does not have direct route to public internet). A RDS/PostgreSQL database instance is also attached to the private subnet. Application Load Balancer (ALB) is then deployed to a public subnets, in order to expose the application to the public internet. A bastion host is also deployed to a public subnet, with a publicly accessible IP with a security group with to restrict access for use in on-demand manner. Also, a script for tunneling access to the RDS database through the SSM service (AWS Systems Manager Session Manager, whoa :)) is provided, to even remove the need for a bastion host on the public network (see [Toward a bastion-less world](https://aws.amazon.com/blogs/infrastructure-and-automation/toward-a-bastion-less-world/) for background).
+
+The architecture picture below shows the network structure, along how the services are situated in the subnets.
+
+![network-architecture.png](network-architecture.png)
 
 TODO: diagrams using mermaid or graphviz
 
