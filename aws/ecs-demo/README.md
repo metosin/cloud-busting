@@ -8,31 +8,51 @@ The architecture picture below shows the network structure, along how the servic
 
 ![network-architecture.png](network-architecture.png)
 
-The module setup is meant to mimic a real life project, so it might be more complex than what is absolutely necessary for a minimal Fargate based web service. To regain simplicity in creating the infrastructure, [helper scripts](https://github.com/metosin/cloud-busting/blob/main/aws/ecs-demo/modules/README.md#fast-track-for-apply-and-destroy) are provided for apply/destroy the whole suite in one go.
+The module setup is meant to mimic a real life project, so it might be more complex than what is absolutely necessary for a minimal Fargate based web service. To regain simplicity in creating the infrastructure, helper scripts are provided for apply/destroy the whole suite in one go.
 
-# TODO
+## Usage
 
-TODO: Pitää ajaa terraform fmt koko setille lopuksi
+### 1. Preparation
 
-TODO: modulien ajojärjestys pitää ohjeistaa
+To bring the resources into life, we first need to create a Terraform backend, which stores the state of each resource. To do this, follow the instructions in the [terraform-backend directory](../terraform-backend) directory.
 
-TODO: pitää ohjeistaa, että jos tekee omia uusia moduleita, niin `key` terraform staten pitää olla uniikki:
+### 2. Fast Track: Create All Resources with Helper Script
 
-TODO: voisi laittaa source ../../../tools/terraform-init valittamaan jo TF_VAR_prefix ei asetettu
+Alternative to running `terraform apply` in each module separately in dependency order (TODO: linkki), you can create all of the resources in one go, with a bit of preparation:
 
-```hcl-terraform
-data "terraform_remote_state" "network" {
-  backend   = "s3"
-  workspace = terraform.workspace
-  config = {
-    key    = "ecs-demo-network.tfstate"   # ====> This needs to be unique.
-    bucket = var.state_bucket
-  }
-}
-``` 
+1. Install the [sops](https://github.com/mozilla/sops) tool via [these instructions](https://github.com/metosin/cloud-busting/blob/main/aws/README.md#sops-installation)
+2. Specify the master password for RDS/PostgreSQL instance via [these instructions](https://github.com/metosin/cloud-busting/tree/main/aws/ecs-demo/modules/rds#specifying-master-user-password)
+3. Specify your `AWS_PROFILE`, `AWS_DEAFULT_REGION` and Terraform resource `prefix`:
+```bash
+export AWS_DEFAULT_REGION=eu-west-1
+export AWS_PROFILE=<YOUR-VALUE-HERE>
+export TF_VAR_prefix=<YOUR-VALUE-HERE>
+```
+4. Run the `apply-all.sh` script
+```bash
+./apply-all.sh
+```
 
-If you e.g. create a new module `s3`, you have to create a `setup.tf` file and there you need to have a unique `key`, e.g. `"ecs-demo-s3.tfstate"`
+Sit back and watch the fireworks 🎆 :) 
 
-```hcl-terraform
-    key    = "ecs-demo-s3.tfstate"   # ====> This needs to be unique.
-```  
+### 3. Study Resources in AWS Console
+
+While resources are being created, sign into the AWS Console and study for example the [VPC](https://eu-west-1.console.aws.amazon.com/vpc/home?region=eu-west-1#vpcs:) (Virtual Private Cloud), [RDS](https://eu-west-1.console.aws.amazon.com/rds/home?region=eu-west-1#databases:) (Relational Database Service), [ECS](https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-west-1#/clusters) (Elastic Container Service) Consoles. When all the resources are created, the [Resource Groups](https://eu-west-1.console.aws.amazon.com/resource-groups/home?region=eu-west-1#) Console will provide a place to navigate to all the resources. 
+
+### 4. In depth: Create Resources Individually
+
+The resources of each module can be created by running the following commands inside the module directory:
+
+* `source ../../../tools/terraform-init`
+* `terraform plan`
+* `terraform apply`
+
+NOTE: We replace `terraform init` with our script here (`source ../../../tools/terraform-init`) - the script populates the correct values for the Terraform state S3 bucket, lock DynamoDB table and the KMS encrytion key that you used when initializing the backend earlier.
+
+The modules depend on each other via [Terrafrom remote state](https://www.terraform.io/docs/providers/terraform/d/remote_state.html), so the [Terraform apply](https://www.terraform.io/docs/commands/apply.html) commands needs to be run in the module dependency order (TODO: linkki)
+
+### Last Step: Destroy
+
+When the resources are no longer needed, they can be destroyed via `terraform destroy` command.
+
+Either run `terraform destroy` individually in all modules in dependency order, or run the `destroy-all.sh` script, which does the required steps in dependency order in one go.
