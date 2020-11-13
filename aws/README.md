@@ -142,11 +142,13 @@ Switched to workspace "default".
 
 The demos are simplified for brewity for educational purposes. In real productions systems you should consider the following options.
 
-### Vars files.
+### Environment Specific Variable Files
 
-- Vars files for various environments, e.g. dev-vars.tf, qa-vars.tf. In real world projects you should be able to inject e.g. various instance sizes. TODO: selitä tässä, esimerkki network modulin vars-hakemistossa
+In real projets, there would usually be separate environments (which can also be called stages), e.g. dev, test, qa, prod. The environments might preferrably reside in different AWS accounts, or even in the same AWS account (e.g. dev and test in one account, qa and prod separately).
 
-Examples in the network module:
+The same Terraform configuration would be used for all of the environments, but usually parameterized, to minimize costs. For example, dev might use smaller instance sizes (EC2, RDS) while productions would use larger instances.
+
+In Terraform, the parameterization can be done via input variables. Variable files can contain variable value assignments. It is customary to use a directory to hold the variable files for each environment. The environemnt specific variable file is then provided to the Terraform commands via the `-var-file` argument. In the ecs-demo, this setup is shown in the [ecs-demo/modules/network](ecs-demo/modules/network) module.
 
 Using `dev` values:
 
