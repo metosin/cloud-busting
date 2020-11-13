@@ -18,7 +18,8 @@ export TF_VAR_developer_ips='[]'
 destroy_module bastion
 unset TF_VAR_developer_ips
 
-export TF_VAR_image_tag=W
+# Ditto for image_tag
+export TF_VAR_image_tag="no-op"
 destroy_module ecs
 unset TF_VAR_image_tag
 
