@@ -18,7 +18,7 @@ To bring the resources into life, we first need to create a Terraform backend, w
 
 ### 2. Fast Track: Create All Resources with Helper Script
 
-Alternative to running `terraform apply` in each module separately in dependency order (TODO: linkki), you can create all of the resources in one go, with a bit of preparation:
+Alternative to running `terraform apply` in each module separately in [dependency order](https://github.com/metosin/cloud-busting/blob/main/aws/ecs-demo/modules/README.md#module-dependencies), you can create all of the resources in one go, with a bit of preparation:
 
 1. Install the [sops](https://github.com/mozilla/sops) tool via [these instructions](https://github.com/metosin/cloud-busting/blob/main/aws/README.md#sops-installation)
 2. Specify the master password for RDS/PostgreSQL instance via [these instructions](https://github.com/metosin/cloud-busting/tree/main/aws/ecs-demo/modules/rds#specifying-master-user-password)
@@ -49,7 +49,7 @@ The resources of each module can be created by running the following commands in
 
 NOTE: We replace `terraform init` with our script here (`source ../../../tools/terraform-init`) - the script populates the correct values for the Terraform state S3 bucket, lock DynamoDB table and the KMS encrytion key that you used when initializing the backend earlier.
 
-The modules depend on each other via [Terrafrom remote state](https://www.terraform.io/docs/providers/terraform/d/remote_state.html), so the [Terraform apply](https://www.terraform.io/docs/commands/apply.html) commands needs to be run in the module dependency order (TODO: linkki)
+The modules depend on each other via [Terrafrom remote state](https://www.terraform.io/docs/providers/terraform/d/remote_state.html), so the [Terraform apply](https://www.terraform.io/docs/commands/apply.html) commands needs to be run in the module [dependency order](https://github.com/metosin/cloud-busting/blob/main/aws/ecs-demo/modules/README.md#module-dependencies).
 
 ### Last Step: Destroy
 
