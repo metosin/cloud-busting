@@ -53,13 +53,13 @@ See instructions in [terraform-backend](./terraform-backend/README.md).
 
 ### Running Commands in Modules
 
-Change the working directory into a module directory:
+To run Terraform commans in the modules of these demos, first change the working directory into a module directory:
 
 ```bash
 cd ecs-demo/modules/network
 ```
 
-First, initialize the Terraform backend of a module with:
+Then, initialize the Terraform backend of a module with a wrapper script:
 
 ```bash
 source ../../../tools/terraform-init
@@ -75,7 +75,9 @@ Terraform has been successfully initialized!
 ...
 ```
 
-After backend initialization, other Terraform commands can be run, for example, check the plan:
+The `terraform-init` wrapper script sets up a few environemnt variables that will be needed by the `apply` and `destroy` commands.
+
+After backend initialization, other Terraform commands can be run, for example, check the plan with:
 
 ```bash
 terrafrom plan
