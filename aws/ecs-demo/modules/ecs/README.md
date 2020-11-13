@@ -55,17 +55,7 @@ Hello World! Running at 89257e6. Database has 27 connections
 
 ### Alarms
 
-The example creates and alarm for UnHealthyHostCount metric, which is the number of backends that have failing health check.
-
-The input variable `monitoring_emails` lists the email addresses to which an email is sent in case the alarm is triggered.
-
-In the demo, the list of emails is empty, but you can define your own email during apply:
-
-```bash
-TF_VAR_monitoring_emails='["my-email@example.com"]' terraform apply
-```
-
-The email address is then added to a SNS topic and a confirmation is sent to the email address to accept the reception of messages from the SNS topic. So check your mailbox after adding the email.
+The example creates and alarm for UnHealthyHostCount metric, which is the number of backends that have failing health check. 
 
 ## Destroy
 
