@@ -1,6 +1,6 @@
 # Dashboard Module
 
-Module for creating a custom AWS CloudWatch Dashboard.
+Module for creating a custom [AWS CloudWatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html).
 
 ## Hints for Implementing a Custom AWS CloudWatch Dashboard for Your Project
 
