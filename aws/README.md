@@ -140,8 +140,6 @@ Switched to workspace "default".
 
 The demos are simplified for brewity for educational purposes. In real productions systems you should consider the following options.
 
-- Bastion or Parameter Store solution: short explanation
-
 ### Vars files.
 
 - Vars files for various environments, e.g. dev-vars.tf, qa-vars.tf. In real world projects you should be able to inject e.g. various instance sizes. TODO: selitä tässä, esimerkki network modulin vars-hakemistossa
@@ -159,10 +157,6 @@ Using `prod` values:
 ```bash
 terraform plan -var-file=vars/prod.tfvars
 ``` 
-
-### Bastion Host or AWS TODO
-
-- Bastion or Parameter Store solution: short explanation
 
 ### Secrets
 
