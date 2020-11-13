@@ -25,3 +25,4 @@ unset TF_VAR_image_tag
 destroy_module rds
 destroy_module ecr
 destroy_module network
+destroy_module common

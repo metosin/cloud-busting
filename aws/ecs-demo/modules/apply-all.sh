@@ -19,6 +19,7 @@ build_application() {
     popd > /dev/null
 }
 
+apply_module common
 apply_module network
 apply_module ecr
 apply_module rds
