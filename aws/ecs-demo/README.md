@@ -16,6 +16,8 @@ The module setup is meant to mimic a real life project, so it might be more comp
 
 To bring the resources into life, we first need to create a Terraform backend, which stores the state of each resource. To do this, follow the instructions in the [terraform-backend directory](../terraform-backend) directory.
 
+Also, take a cup of coffee or some snack, creating all the resources, even in one go, takes around 20 minutes :)
+
 ### 2. Fast Track: Create All Resources with Helper Script
 
 Alternative to running `terraform apply` in each module separately in [dependency order](https://github.com/metosin/cloud-busting/blob/main/aws/ecs-demo/modules/README.md#module-dependencies), you can create all of the resources in one go, with a bit of preparation:
