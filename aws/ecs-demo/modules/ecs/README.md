@@ -1,6 +1,14 @@
-# Webapp run via ECS service
+# ECS module
 
-Module for running a simple webapp with AWS [ECS](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html) (Elastic Container Service) using [Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html) runtime.
+This module creates a [ECS](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html) (Elastic Container Service) cluster with one service that runs 2 tasks with [Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html) launch type.
+
+ECS is a service for running Docker containers on a cluster of hosts. Fargate is a service that ECS can use to launch Docker containers. Tasks are a way to tell ECS the parameters to pass to `docker run` invocation (e.g. image, environment variables...). To explain what Fargate is, we first explain how one would traditionally run Docker containers in a set of virtual machines with ECS.
+
+Traditionally, one would provision a EC2 Instance(s) with Docker Daemon and the ECS Agent installed (The [ECS Optimized AMI](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html) already has all components installed) and instruct the host to [join the ECS cluster](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/bootstrap_container_instance.html).
+
+With Fargate, instead of provisioning a whole Virtual Machine, the ECS service requests an isolated CPU, memory and networking interface from the Fargate service. The Fargate runtime uses a minimalistic VM, called [Firecracker](https://firecracker-microvm.github.io/) to run the Docker container. Instead of choosing an EC2 instance type to run on, the CPU and memory configuration is specified in the Task configuration from a set of [pre-defined options](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html#fargate-tasks-size).
+
+In addition to ECS, Fargate can also be used by the [EKS](https://aws.amazon.com/eks) (Elastic Kubernetes Service).
 
 ## Create
 
