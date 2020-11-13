@@ -10,7 +10,31 @@ With Fargate, instead of provisioning a whole Virtual Machine, the ECS service r
 
 In addition to ECS, Fargate can also be used by the [EKS](https://aws.amazon.com/eks) (Elastic Kubernetes Service).
 
-## Create
+## Running apply & destroy: Docker Image Tag
+
+The Task definition uses `image_tag` input variable to provide the full URL from which to download the Docker Image to run:
+
+```hcl
+...
+image = "${data.terraform_remote_state.ecr.outputs.backend_repository_url}:${var.image_tag}"
+...
+```
+
+Because of this, a value has to be provided, when running `apply` and `destroy`. The [build.sh](https://github.com/metosin/cloud-busting/blob/main/aws/ecs-demo/application/build.sh#L14) script used to build the Docker image uses the following to get the tag value from current repository Git state:
+
+```bash
+GIT_SHA=$(git rev-parse --short HEAD)
+```
+
+So you can use this value, or even
+
+```bash
+export TF_VAR_image_tag=$GIT_SHA
+```
+
+before running `apply` and `destroy`. Just remember to use the same `image_tag` value that you used when buidling the image :)
+
+### Example of apply
 
 Create the service by first initializing the module:
 
@@ -18,7 +42,7 @@ Create the service by first initializing the module:
 source ../../../tools/terraform-init
 ```
 
-Running apply will ask for a Git hash of the Docker image to run. This is the tag the [application image](../../application) was tagged with.
+Then run apply (provide the Git short sha when asked):
 
 ```bash
 terraform apply
@@ -53,11 +77,7 @@ curl cbkimmo-backend-580158845.eu-west-1.elb.amazonaws.com
 Hello World! Running at 89257e6. Database has 27 connections
 ```
 
-### Alarms
-
-The example creates and alarm for UnHealthyHostCount metric, which is the number of backends that have failing health check. 
-
-## Destroy
+### Destroy
 
 Destroy the resources by running:
 
@@ -66,3 +86,8 @@ terraform destroy
 ```
 
 Destroy will also prompt for the Git tag input variable, but the value will not matter in this case, since no new resource will be created.
+
+
+## Alarms
+
+The example creates and alarm for UnHealthyHostCount metric, which is the number of backends that have failing health check. 
