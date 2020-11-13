@@ -1,9 +1,8 @@
 # Bastion module
 
-TODO: Tähän idea bastionista:
-- Bastion on ephemeral: luodaan on-demand. Kun ei tarvita, niin tuhotaan, jolloin myös avain tuhoutuu.
-- Kun bastion luodaan per käyttäjä on-demand ja bastion ei ole muuna aikana ylhäällä, niin vähennetään hyökkäyspintaa.
+Resources for creating a bastion host, that is meant to be ephemeral, i.e. created when needed and destroyed after use. A SSH keypair is created for tunneling traffic via SSH through the bastion host. With the ephemeral nature of the bastion, sharing the SSH keys to other users is avoided.
 
+## Usage
 
 You are going to need the RDS DNS name later, let's first get it using `aws cli`, by narrowing the DB instance listing with a [JMESPath](https://jmespath.org/) query:
 
@@ -60,8 +59,16 @@ aws ssm get-parameter --name /rds/master_password --with-decryption --query Para
 very-secre-...
 ```
 
-## TODO
+## Bonus: Use Systems Manager Agent for Tunneling
 
-* Käytä tähän t4g.nano instanssia, halvin EC2 instanssi nykyään, ARM pohjainen. Valitse ARM -pohjainen AMI, esim. ami-036559f6f83de21be
-* Tehdään perinteinen versio, jossa kone istuu public subnetissa ja koneella on Elastic IP.
-* Jos jää aikaa, niin tehdään myös versio, jossa kone onkin private subnetissa, ei julkista osoitetta, käytetään SSM -agenttia tunnelointiin, lisätään vaikkapa tools -hakemistoon tämän tyylinen scripti, kuin Jabster projektissa: https://github.com/metosin/jabster/blob/master/tools/rds_proxy
+The Bastion instance in this module reserves a public IP address. You can also try putting the instance into one of the private subnets, remove the Elastic IP (EIP) resource, leave out the aws_key_pair resource and make a tunnel via the AWS Systems Manager Agent (much like described in the [Toward a bastion-less world](https://aws.amazon.com/blogs/infrastructure-and-automation/toward-a-bastion-less-world/) blog post).
+
+In this setup, the SSH key for tunneling can be temporarily created and offered to the instance by the Instance Metadata service, via the [EC2 Connnect API](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-methods.html#ec2-instance-connect-connecting-aws-cli). This setup needs some steps to execute, for which a `ssm-rds-tunnel.sh` script is provided:
+
+```bash
+./ssm-rds-tunnel.sh
+Warning: Permanently added 'i-05669dd645c436f5a' (ECDSA) to the list of known hosts.
+RDS proxy started on localhost at port 7432
+Press any key to close session.
+Exit request sent.
+```
