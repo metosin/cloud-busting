@@ -14,6 +14,10 @@ This example consists of the following Terraform modules:
   * A module for the Docker repository
 * resource-groups
   * A module that defines resource groups for making it easier to find the resources from the AWS console
+* common
+  * Module for utility resources. Contains a SNS topic for monitoring use.
+* dashboard
+  * Creates a Cloudwatch Dashboard with metrics of the resources defined in other modules
   
 ## Preparation
 
