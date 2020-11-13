@@ -1,6 +1,12 @@
 # Bastion module
 
-Resources for creating a bastion host, that is meant to be ephemeral, i.e. created when needed and destroyed after use. A SSH keypair is created for tunneling traffic via SSH through the bastion host. With the ephemeral nature of the bastion, sharing the SSH keys to other users is avoided.
+The bastion host is meant to be ephemeral, i.e. created when needed and destroyed after use. 
+
+The bastion host provides a secure way to access resources in private subnets. There are a couple of layers that provide protection for the bastion host: The developer IP address needs to be configured to the security group of the bastion host and you also need the SSH key that will be generated automatically by this bastion module.
+
+You can create a SSH tunnel to the RDS via the bastion host. 
+
+With the ephemeral nature of the bastion, sharing the SSH keys to other users is avoided.
 
 ## Usage
 
@@ -59,7 +65,7 @@ aws ssm get-parameter --name /rds/master_password --with-decryption --query Para
 very-secre-...
 ```
 
-## Bonus: Use Systems Manager Agent for Tunneling
+## Bonus Chapter: Use Systems Manager Agent for Tunneling
 
 The Bastion instance in this module reserves a public IP address. You can also try putting the instance into one of the private subnets, remove the Elastic IP (EIP) resource, leave out the aws_key_pair resource and make a tunnel via the AWS Systems Manager Agent (much like described in the [Toward a bastion-less world](https://aws.amazon.com/blogs/infrastructure-and-automation/toward-a-bastion-less-world/) blog post).
 
