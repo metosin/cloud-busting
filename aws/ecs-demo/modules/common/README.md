@@ -6,4 +6,4 @@ Contains `aws_sns_topic` for monitoring use and a list of emails that can be reg
 
 ## SNS Topic
 
-SNS ([Simple Notification Service](https://aws.amazon.com/sns/)) provides a way to broadcast messages to topics to which subscriptions can be made (e.g. http endpoint, email, sms). Typically SNS is used by system operators to subscribe certain topics to which alarms send notifications. This demonstration provides a couple of alarms that use the topic in this module.
+[SNS](https://aws.amazon.com/sns/) (Simple Notification Service) provides a way to broadcast messages to topics to which subscriptions can be made (e.g. http endpoint, email, sms). Typically SNS is used by system operators to subscribe certain topics to which alarms send notifications. This demonstration provides a couple of alarms that use the topic in this module.

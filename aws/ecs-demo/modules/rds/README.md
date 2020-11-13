@@ -1,8 +1,12 @@
-# Rds Module
+# RDS Module
 
-A module that contains one RDS (database) resource.
+This module provides the RDS (database) resource.
 
 NOTE: It may well take some 10 minutes to create the RDS module, so be patient.
+
+## What is RDS
+
+[RDS](https://aws.amazon.com/rds/) (Relational Database Service) provides a way to create database as a service. RDS provides out of the box e.g. clustering, automatic fail-over, and backups.
 
 ## Specifying Master User Password
 
@@ -38,6 +42,4 @@ git commit -m "Specify rds master user password"
 
 This way, we can store an encrypted file into version control and decrypt the contents into use by Terraform.
 
-# Explanation
 
-TODO: here short explanation to the resources and why they are created...
