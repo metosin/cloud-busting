@@ -44,9 +44,11 @@ Here's also picture of the module dependency graph:
 
 ![dependencies](./dependencies.png)
 
-### Apply, Fast Track
+## Fast Track for Apply and Destroy
 
-Alternative to running `terraform apply` in each module separately, you can create all of the resources in one go, with a bit of preparation:
+### Apply
+
+Alternative to running `terraform apply` in each module separately in dependency order, you can create all of the resources in one go, with a bit of preparation:
 
 1. Install the [sops](https://github.com/mozilla/sops) tool via [these instructions](https://github.com/metosin/cloud-busting/blob/main/aws/README.md#sops-installation)
 2. Specify the master password for RDS/PostgreSQL instance via [these instructions](https://github.com/metosin/cloud-busting/tree/main/aws/ecs-demo/modules/rds#specifying-master-user-password)
@@ -63,6 +65,6 @@ export TF_VAR_prefix=<YOUR-VALUE-HERE>
 
 Sit back and watch the fireworks 🎆 :) 
 
-## Destroy
+### Destroy
 
-For demo purposes, the `destroy-all.sh` script can be used to destroy all modules in one go, since it's a bit tedious to try remember to run destroy command in dependency order manually.
+Also, alternative to running `terraform destroy` in each module separately in dependency order, the `destroy-all.sh` script can be used to destroy all modules in one go.
