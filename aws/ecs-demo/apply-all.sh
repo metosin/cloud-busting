@@ -7,14 +7,14 @@ set -eu -o pipefail
 apply_module() {
     local MODULE=$1
     echo "Applying $MODULE"
-    pushd $MODULE > /dev/null
+    pushd modules/$MODULE > /dev/null
     source ../../../tools/terraform-init
     terraform apply -auto-approve
     popd > /dev/null
 }
 
 build_application() {
-    pushd ../application > /dev/null
+    pushd application > /dev/null
     ./build.sh
     popd > /dev/null
 }
@@ -38,3 +38,4 @@ apply_module bastion
 unset TF_VAR_developer_ips
 
 apply_module resource-groups
+apply_module dashboard

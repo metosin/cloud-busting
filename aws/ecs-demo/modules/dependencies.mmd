@@ -1,12 +1,19 @@
 graph TD
+  dashboard       --> ecs
+  dashboard       --> rds
   resource-groups --> bastion
   resource-groups --> ecr
   resource-groups --> ecs
   resource-groups --> network
   resource-groups --> rds
+  rds             --> network
+  bastion         --> network
+  bastion         --> rds
   ecs             --> network
   ecs             --> rds
   ecs             --> ecr
-  bastion         --> network
-  bastion         --> rds
-  rds             --> network
+  common          --> resource-groups
+  common          --> rds
+  common          --> ecs
+
+

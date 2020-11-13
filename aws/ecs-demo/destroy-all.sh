@@ -5,12 +5,13 @@
 destroy_module() {
     local MODULE=$1
     echo "Destroying $MODULE"
-    pushd $MODULE > /dev/null
+    pushd modules/$MODULE > /dev/null
     source ../../../tools/terraform-init
     terraform destroy -auto-approve
     popd > /dev/null
 }
 
+destroy_module dashboard
 destroy_module resource-groups
 
 # Input variables need to be always defined, even though we would not need them in the destroy phase
