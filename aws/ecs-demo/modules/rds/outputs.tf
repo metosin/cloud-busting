@@ -10,6 +10,10 @@ output "database_name" {
   value = aws_db_instance.database.name
 }
 
+output "database_instance_identifier" {
+  value = aws_db_instance.database.identifier
+}
+
 # Note that for actual production use, you would create a less privileged user
 # For the demo, we export the master username for use by the application
 output "master_user_name" {
