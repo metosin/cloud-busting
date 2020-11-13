@@ -19,7 +19,11 @@ This example consists of the following Terraform modules:
 * dashboard
   * Creates a Cloudwatch Dashboard with metrics of the resources defined in other modules
   
-Here's also picture of the module dependency graph:
+## Module Dependencies
+
+The modules depend on each other via Terraform remote state, by referencing the output variables. Because of this, the `apply` of each module needs initially to be run in dependency order. Also, when the output value of a module changes, the dependee module needs to be applied for the change to propagate.
+
+The dependencies are shown in the picture below.
 
 ![dependencies](./dependencies.png)
 
