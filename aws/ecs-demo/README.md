@@ -8,23 +8,7 @@ The architecture picture below shows the network structure, along how the servic
 
 ![network-architecture.png](network-architecture.png)
 
-TODO: diagrams using mermaid or graphviz
-
-TODO: Module dependency graph ()
-- ecr
-- network
--- ecs
--- rds 
----- bastion
-
-
-TODO: Painota, että tämä demo on mahdollisimman todenmukainen refe-toteutus, ja sen takia demossa on jonkin verran manuaalisia one-time taskeja. Olisimme voineet myös tehdä demon, jossa yhdellä komennolla saa koko infran aikaan, mutta päädyimme sen sijaan todenmukaisempaan ratkaisuun, jossa on mukana terraform modulien joustavuus ja oikean projektin tietoturva.
-
-
-TODO: Demo-käsikirjoitus pitää olla todella selkeä ja se pitää harjoitella pari kertaa läpi, ettei tule virheitä eikä väärinkäsityksiä!
-
-
-
+The module setup is meant to mimic a real life project, so it might be more complex than what is absolutely necessary for a minimal Fargate based web service. To regain simplicity in creating the infrastructure, [helper scripts](https://github.com/metosin/cloud-busting/blob/main/aws/ecs-demo/modules/README.md#fast-track-for-apply-and-destroy) are provided for apply/destroy the whole suite in one go.
 
 # TODO
 
