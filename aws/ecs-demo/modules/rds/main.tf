@@ -21,7 +21,7 @@ resource "aws_security_group" "database" {
   description = "Database security group"
   vpc_id      = data.aws_vpc.main.id
 
-  # TODO: should this be so that we allow access only from bastion and ECS (app)?
+  # NOTE: Alternative is to allow access only from bastion and ECS.
   ingress {
     description = "Allow traffic from VPC to RDS"
     from_port   = var.rds_port
@@ -114,11 +114,6 @@ resource "aws_db_instance" "database" {
   kms_key_id                          = aws_kms_key.rds_key.arn
   performance_insights_enabled        = true
   performance_insights_kms_key_id     = aws_kms_key.rds_key.arn
-  # TODO
-  # If you need enhanced monitoring:
-  # Monitoring requires a MonitoringRoleARN
-  # monitoring_role_arn                 = "TODO"
-  # monitoring_interval                 = 60
   parameter_group_name = aws_db_parameter_group.database.id
   enabled_cloudwatch_logs_exports = [
   "postgresql"]
