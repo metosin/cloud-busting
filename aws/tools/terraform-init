@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+set -eu -o pipefail
+
 TERRAFORM_BACKEND_DIR=$(pwd)/../../../terraform-backend
+source ../../../tools/aws-envs.sh
 
 pushd $TERRAFORM_BACKEND_DIR > /dev/null
 # Bucket for storing state files, DynamoDB table for protecting concurrent state file modifications and KMS key arn for

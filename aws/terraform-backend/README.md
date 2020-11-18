@@ -4,6 +4,12 @@ Module for creating resources for [Terraform backend state](https://www.terrafor
 
 ## Usage
 
+You need to set up the environment variables, call:
+
+```bash
+source ../tools/aws-envs.sh
+```
+
 First initialize the local backend:
 
 ```bash
@@ -82,4 +88,4 @@ aws dynamodb list-tables
 ```
 
 
-At last, commit `terraform.tfstate` file, which is is local backend state file, into version control, so that the bootstrap state is persisted off your computer.
+Commit `terraform.tfstate` file, which is the local backend state file, into version control. The rationale is that this state file can be shared between developers.

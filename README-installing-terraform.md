@@ -2,18 +2,22 @@
 
 There are few ways of installing Terrafrom:
 
-## Manual installation from archive
+1. Manual installation
+2. Using Homebrew
+3. TFSwitch
+
+## 1. Manual installation from archive
 
 1. Download Terraform from [download site](https://www.terraform.io/downloads.html).
 2. Unzip the archive and put it into `$PATH`
 
-## Using Homebrew
+## 2. Using Homebrew
 
 Use the [Homebrew formulae](https://formulae.brew.sh/formula/terraform)
 
     brew install terraform
 
-## Using [tfswitch](https://tfswitch.warrensbox.com/)
+## 3. Using [tfswitch](https://tfswitch.warrensbox.com/)
 
 First, install `tfswitch` via [instructions](https://tfswitch.warrensbox.com/Install/), for example
 
@@ -54,16 +58,3 @@ version](https://www.terraform.io/docs/configuration/terraform.html#specifying-a
     Matched version: 0.13.4
     Switched terraform to version "0.13.4"
 
-# Installing AWS CLI
-
-Follow [AWS CLI instructions](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html). After installation, configure credentials by following [the instructions](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html). Usually, this can be done by running the basic configuration wizard:
-
-```bash
-aws configure
-AWS Access Key ID [None]: <YOUR ACCESS KEY ID HERE>
-AWS Secret Access Key [None]: <YOUR SECRET ACCESS KEY HERE>
-Default region name [None]: eu-west-1
-Default output format [None]: json
-```
-
-For the demo, we'll use `eu-west-1` region for all the resources.

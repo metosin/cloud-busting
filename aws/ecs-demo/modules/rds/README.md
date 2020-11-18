@@ -10,6 +10,8 @@ NOTE: It may well take some 10 minutes to create the RDS module, so be patient.
 
 ## Specifying Master User Password
 
+**NOTE**: If you have followed the instructions you have already created the sops secret.
+
 When creating a RDS instance, a single user is created, called the master user, which owns the initial database. A password needs to be specified for the user, so we need a way to securely pass the password to the API call that creates the DB instance and store the password.
 
 In this example, we've chosen to use the [sops](https://github.com/mozilla/sops) tool by Mozilla. As per the [general secrets instructions](https://github.com/metosin/cloud-busting/blob/main/aws/README.md#secrets), **before** running `plan` or `apply` commands, specify the password in a file encrypted with a KMS key created when the Terraform backend was created:
