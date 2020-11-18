@@ -10,7 +10,7 @@ After forking this repository you should read [installing Terraform instructions
 
 ## AWS
 
-For running AWS demonstrations, continue to [aws](aws) directory and read [general instructions](aws/README.md).
+For running AWS demonstrations, continue to aws directory and read [general instructions](aws/README.md).
 
 After that, you can run the [ecs-demo](aws/ecs-demo/README.md).
 

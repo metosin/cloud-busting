@@ -8,9 +8,9 @@ The example(s) use a common way of running Terraform, described in the following
 
 ### Setting Environment Variables for AWS Profile and Region
 
-You have to install AWS cli and create an AWS profile yourself. Follow instructions in [installing aws cli](README-installing-aws-cli.md]).
+You have to install AWS cli and create an AWS profile yourself. Follow instructions in [installing aws cli](README-installing-aws-cli.md).
 
-Copy paste file [aws-envs_template.sh](tools/aws-envs_template.sh) to file name `aws-envs.sh` and then change your own values in that file. 
+Copy paste file [aws-envs_template.sh](tools/aws-envs_template.sh) to file name `aws-envs.sh` (in the same directory) and then change your own values in that file. 
 
 ### Terraform backend creation
 
@@ -24,5 +24,5 @@ See instructions in [terraform-backend](./terraform-backend/README.md).
 
 ### Run the Demonstrations
 
-Now you can go to the demonstration directory and create the actual AWS infrastructure. E.g. go to directory [ecs-demo](ecs-demo) and read the [instructions](ecs-demo/README.md).
+Now you can go to the demonstration directory and create the actual AWS infrastructure. Change working directory to ecs-demo and read the [instructions](ecs-demo/README.md).
 

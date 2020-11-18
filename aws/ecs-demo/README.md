@@ -6,13 +6,13 @@ This directory contains an AWS infrastructure demonstration comprising of a Virt
 
 The web application is packaged into a Docker image. The Elastic Container Service (ECS) is using the Fargate launch type. Fargate is used to remove the need to provision virtual machines for running Docker containers.
 
-The Fargate runtime is connected to a private subnet (which does not have direct route to public internet). A RDS/PostgreSQL database instance is also attached to the private subnet. Application Load Balancer (ALB) is then deployed to a public subnet, in order to expose the application to the public internet. A bastion host module is also provided for SSH tunneling.
+The Fargate runtime is connected to a private subnet (which does not have direct route to public internet). A RDS/PostgreSQL database instance is also attached to the private subnet. Application Load Balancer (ALB) is then attached to public subnets, in order to expose the application to the public internet. A bastion host module is also provided for SSH tunneling.
 
 The architecture picture below shows the network structure, along how the services are situated in the subnets.
 
 ![network-architecture.png](network-architecture.png)
 
-The module setup is meant to mimic a real life project, so it might be more complex than what is absolutely necessary for a minimal Fargate based web service. To regain simplicity in creating the infrastructure, helper scripts are provided for apply/destroy the whole suite in one go.
+The module setup is meant to mimic a real life project, so it might be more complex than what is absolutely necessary for a minimal Fargate based web service. To regain simplicity in creating the infrastructure, helper scripts are provided to apply/destroy the whole suite in one go.
 
 ## Usage
 
@@ -74,6 +74,19 @@ The `apply-all.sh` script runs `terraform init/apply` in each module. You can al
 
 While resources are being created, sign into the AWS Console and study for example the [VPC](https://eu-west-1.console.aws.amazon.com/vpc/home?region=eu-west-1#vpcs:) (Virtual Private Cloud), [RDS](https://eu-west-1.console.aws.amazon.com/rds/home?region=eu-west-1#databases:) (Relational Database Service), [ECS](https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-west-1#/clusters) (Elastic Container Service) Consoles. When all the resources are created, the [Resource Groups](https://eu-west-1.console.aws.amazon.com/resource-groups/home?region=eu-west-1#) Console will provide a place to navigate to all the resources. 
 
+You can `curl` the web application, see more detailed instructions in the [ecs module](modules/ecs/README.md).
+```bash
+cd modules/ecs
+terraform output
+# You see something like:
+ecs_cluster_name = yourname-backend
+ecs_service_name = yourname-backend
+load_balancer_dns_name = yourname-backend-999999999.eu-west-1.elb.amazonaws.com
+# Curl using the load balance dns name:
+curl yourname-backend-999999999.eu-west-1.elb.amazonaws.com
+# You see something like:
+Hello World! Running at ee5acc3. Database has 27 connections
+```
 
 ### 5. Last Step: Destroy
 

@@ -1,5 +1,7 @@
 # Installing AWS CLI
 
+For configuring the AWS cli you first need the AWS Access Key ID and AWS Secret Access Key. You can create these keys for yourself in AWS Console, IAM view / Users / select your user / Security Credentials tab / Create access key button. We assume that your user has rights to create the resources needed in this demonstration. 
+
 Follow [AWS CLI instructions](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) to install AWS cli. After installation, configure credentials by following [the instructions](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html). Usually, this can be done by running the basic configuration wizard:
 
 ```bash

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -eu -o pipefail
-
 TERRAFORM_BACKEND_DIR=$(pwd)/../../../terraform-backend
 source ../../../tools/aws-envs.sh
 
