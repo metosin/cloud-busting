@@ -26,3 +26,6 @@ See instructions in [terraform-backend](./terraform-backend/README.md).
 
 Now you can go to the demonstration directory and create the actual AWS infrastructure. Change working directory to ecs-demo and read the [instructions](ecs-demo/README.md).
 
+### Further reading
+
+The [Optional Reading](optional-reading.md) document contains more in-depth discussion on the topics that are not covered by the simplified instructions to run the demonstrations. Also, check do check the Terraform source code in the examples. The resource definitions contain comments which explain briefly what the definitions are and what they mean.
