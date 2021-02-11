@@ -34,10 +34,6 @@ resource "aws_subnet" "public" {
     Name       = "${local.res_prefix}-public-subnet-${count.index}"
     SubnetType = "public"
   })
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_subnet" "private" {
@@ -51,10 +47,6 @@ resource "aws_subnet" "private" {
     Name       = "${local.res_prefix}-private-subnet-${count.index}"
     SubnetType = "private"
   })
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_internet_gateway" "main" {
@@ -63,10 +55,6 @@ resource "aws_internet_gateway" "main" {
   tags = merge(local.default_tags, {
     Name = "${local.res_prefix}-igw"
   })
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_eip" "nat" {
@@ -75,10 +63,6 @@ resource "aws_eip" "nat" {
   tags = merge(local.default_tags, {
     Name = "${local.res_prefix}-nat-eip"
   })
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_nat_gateway" "nat" {
@@ -88,10 +72,6 @@ resource "aws_nat_gateway" "nat" {
   tags = merge(local.default_tags, {
     Name = "${local.res_prefix}-nat-gw"
   })
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_route_table" "public" {
@@ -101,30 +81,18 @@ resource "aws_route_table" "public" {
     Name       = "${local.res_prefix}-public-route-table"
     SubnetType = "public"
   })
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_route" "public" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.main.id
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_route_table_association" "public" {
   count          = var.public-subnet-count
   route_table_id = aws_route_table.public.id
   subnet_id      = aws_subnet.public[count.index].id
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_route_table" "private" {
@@ -134,28 +102,16 @@ resource "aws_route_table" "private" {
     Name       = "${local.res_prefix}-private-route-table"
     SubnetType = "private"
   })
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_route" "private" {
   route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat.id
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_route_table_association" "private" {
   count          = var.private-subnet-count
   route_table_id = aws_route_table.private.id
   subnet_id      = aws_subnet.private[count.index].id
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
