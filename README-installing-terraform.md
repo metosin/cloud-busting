@@ -19,6 +19,11 @@ Use the [Homebrew formulae](https://formulae.brew.sh/formula/terraform)
 
 ## 3. Using [tfswitch](https://tfswitch.warrensbox.com/)
 
+
+Tfswitch keeps the Terraform binaries stored under `$HOME/.terraform.versions`, which helps switching version especially when managing multiple Terraform projetcs.
+
+
+### OS X
 First, install `tfswitch` via [instructions](https://tfswitch.warrensbox.com/Install/), for example (Note: this conflicts with the `terraform` formulae in option 2., so chooce one or the other solution)
 
     brew install warrensbox/tap/tfswitch
@@ -34,12 +39,12 @@ Switched terraform to version "0.13.4"
 
 tfswitch will read the `version.tf` file found the root directory of the repository, and selects the version specified in that file, which helps to make sure everyone in your team is using the same version of Terraform. Otherwise a menu for selectin the version will be shown.
 
-For Linux users, specify a binary that under the `$HOME` directory (in OSX, writing to `/usr/local/bin` is usually allowed):
+### Linux
+
+For Linux users, install binaries to a folder which is in `PATH`, often e.g. `$HOME/bin`:
 
 ```bash
-mkdir $HOME/bin
-export PATH=$PATH:$HOME/bin
-tfswitch -b $HOME/bin/terraform
+bash <(curl -s https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh) -b ${HOME}/bin
 ```
 
-Tfswitch keeps the Terraform binaries stored under `$HOME/.terraform.versions`, which helps switching version especially when managing multiple Terraform projetcs.
+This will install both `terraform` and `tfswitch` commands, and keep `terraform` file linked to the selected version.
